@@ -41,7 +41,7 @@ export default function () {
             href={tab.path}
             className="flex flex-col gap-2 items-center flex-1"
           >
-            <img src={tab.icon} alt={tab.name} className="size-5" />
+            <img src={tab.icon} alt={tab.name} className="size-5.5" />
             <span
               className={`text-xs font-medium  ${
                 tab.name === "Home" ? "text-[#FFA840]" : "text-gray-400"
