@@ -6,8 +6,8 @@ function App() {
   return (
     <div>
       <Header />
-      <div className="flex justify-center items-center lg:min-h-[calc(100dvh-64px)] min-h-[calc(100svh-120px)] flex-col gap-10">
-        <h1 className="text-2xl md:text-4xl font-bold text-orange-400">
+      <div className="flex justify-center items-center lg:min-h-[calc(100dvh-64px)] min-h-[calc(100svh-120px)] flex-col gap-12">
+        <h1 className="text-2xl md:text-4xl font-semibold text-[#FFA840]">
           Coming Soon!
         </h1>
         <TruckCarousel />
