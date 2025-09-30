@@ -25,7 +25,7 @@ export default function Header() {
       <div className="flex gap-6 items-center">
         <HamburgerDesktop />
         <div className="flex gap-2 items-center cursor-pointer">
-          <img src={logo} alt="Fastmet Logo" className="size-6" />
+          <img src={logo} alt="Fastmet Logo" className="size-6 lg:size-8" />
           <h1 className="font-bold text-sm lg:text-2xl">FastMet</h1>
         </div>
       </div>
