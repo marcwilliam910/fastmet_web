@@ -30,14 +30,6 @@ const PAGES = [
   {name: "Sign Out", icon: logoutIcon, path: "/logout"},
 ];
 
-const includedOnMobile = [
-  "My Profile",
-  "Settings",
-  "About",
-  "Apply as Driver",
-  "Sign Out",
-];
-
 export default function HamburgerDesktop() {
   return (
     <Sheet>
@@ -56,9 +48,7 @@ export default function HamburgerDesktop() {
             <a
               href={page.path}
               key={page.name}
-              className={`items-center gap-4 px-6 py-3 w-full hover:bg-[#13314a] transition ${
-                includedOnMobile.includes(page.name) ? "flex" : "hidden lg:flex"
-              }`}
+              className={`items-center gap-4 px-6 py-3 w-full hover:bg-[#13314a] transition flex`}
             >
               <img src={page.icon} alt={page.name} className="w-6 h-6" />
               <span className="font-semibold">{page.name}</span>
