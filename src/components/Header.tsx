@@ -1,10 +1,10 @@
 import {ArrowBigRight} from "lucide-react";
-import question from "../assets/question.png";
 import {logo} from "@/constants/images";
+import InfoModal from "./InfoModal";
 
 export default function Header() {
   return (
-    <header className="lg:px-16 px-4 md:py-4 py-3 justify-between items-center z-50 bg-[#0f2535] text-white fixed top-0 left-0 right-0 flex">
+    <header className="lg:px-16 px-4 md:py-4 py-3 justify-between items-center z-50 bg-secondary text-white fixed top-0 left-0 right-0 flex">
       <div className="flex gap-6 items-center justify-between w-full">
         <div className="flex gap-2 items-center cursor-pointer">
           <img
@@ -17,9 +17,7 @@ export default function Header() {
         <div className="flex flex-row items-center gap-5">
           <p className="font-semibold hidden md:block">Tap for more info</p>
           <ArrowBigRight className="hidden md:block fill-primary text-primary size-8" />
-          <button className="cursor-pointer p-1.5 border border-primary bg-white rounded-full">
-            <img src={question} alt="question" className="size-5" />
-          </button>
+          <InfoModal />
         </div>
       </div>
     </header>
