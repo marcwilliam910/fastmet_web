@@ -9,6 +9,7 @@ import suv from "../assets/vehicle/suv.png";
 import logo from "../assets/logo.png";
 import question from "../assets/question.png";
 import rider from "../assets/rider.png";
+import border from "../assets/border.png";
 
 export {
   phoneBG,
@@ -22,12 +23,12 @@ export {
   logo,
   question,
   rider,
+  border,
 };
 
-
 export const VEHICLES = [
-  {id: "motorcycle", name: "Motorcycle", img: motor},
-  {id: "sedan", name: "Sedan", img: sedan},
-  {id: "pickup", name: "Pickup", img: pickup},
-  {id: "suv", name: "MPV/SUV", img: suv},
+  { id: "motorcycle", name: "Motorcycle", img: motor },
+  { id: "sedan", name: "Sedan", img: sedan },
+  { id: "pickup", name: "Pickup", img: pickup },
+  { id: "suv", name: "MPV/SUV", img: suv },
 ];
