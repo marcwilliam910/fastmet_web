@@ -1,4 +1,4 @@
-import {Truck, User} from "lucide-react";
+import { Truck, User } from "lucide-react";
 
 export default function SharedFooter() {
   return (

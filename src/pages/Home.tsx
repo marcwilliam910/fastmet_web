@@ -10,8 +10,8 @@ import {
   sedan,
   single_phone,
 } from "@/constants/images";
-import {Play, Truck, User} from "lucide-react";
-import {Link} from "react-router-dom";
+import { Play } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -50,7 +50,7 @@ export default function Home() {
           {/* Left Side - Mockup */}
           <div
             className="lg:size-72 size-56 md:size-64 flex justify-center relative items-center bg-cover bg-center bg-no-repeat"
-            style={{backgroundImage: `url(${phoneBG})`}}
+            style={{ backgroundImage: `url(${phoneBG})` }}
           >
             <div className="absolute bg-gradient-to-b from-[#FFD07F] to-primary rounded-full blur-2xl size-64 md:size-80 opacity-40" />
 
@@ -105,7 +105,7 @@ export default function Home() {
           {/* Left Side - Mockup */}
           <div
             className="lg:size-72 size-56 md:size-64 flex justify-center relative items-center bg-cover bg-center bg-no-repeat"
-            style={{backgroundImage: `url(${phoneBG})`}}
+            style={{ backgroundImage: `url(${phoneBG})` }}
           >
             <div className="absolute bg-gradient-to-b from-[#FFD07F] to-primary rounded-full blur-2xl size-64 md:size-80 opacity-40" />
 
