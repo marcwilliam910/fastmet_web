@@ -2,10 +2,12 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import RootLayout from "./layout/RootLayout";
+import ErrorBoundary from "./pages/Error";
 
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
+    errorElement: <ErrorBoundary/>,
     children: [
       {
         path: "/",

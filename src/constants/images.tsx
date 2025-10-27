@@ -23,3 +23,11 @@ export {
   question,
   rider,
 };
+
+
+export const VEHICLES = [
+  {id: "motorcycle", name: "Motorcycle", img: motor},
+  {id: "sedan", name: "Sedan", img: sedan},
+  {id: "pickup", name: "Pickup", img: pickup},
+  {id: "suv", name: "MPV/SUV", img: suv},
+];
