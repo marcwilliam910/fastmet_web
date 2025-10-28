@@ -1,7 +1,7 @@
 import Footer from "@/components/home/Footer";
 import Info from "@/components/home/Info";
 import Phone from "@/components/home/Phone";
-import InfoModal from "@/components/InfoModal";
+import InfoModal from "@/components/modals/InfoModal";
 import {
   logo,
   motor,

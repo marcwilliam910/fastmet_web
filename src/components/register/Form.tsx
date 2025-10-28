@@ -1,12 +1,14 @@
 import { VEHICLES } from "@/constants/images";
 import React, { useState } from "react";
 import PhoneInput from "react-phone-input-2";
+import LoaderModal from "../modals/Loader";
+import SuccessModal from "../modals/success";
 
 interface FormData {
   fullName: string;
   address: string;
   contactNumber: string;
-  emailAddress: string;
+  email: string;
   birthDate: string;
   gender: string;
 }
@@ -17,14 +19,13 @@ const validate = (formData: FormData, selectedVehicle: string) => {
   if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
   if (!formData.address.trim()) newErrors.address = "Address is required";
   if (!formData.contactNumber.trim())
-    newErrors.contactNumber = "Mobile number is required";
+    newErrors.contactNumber = "Contact number is required";
   else if (!/^(63|0)\d{10}$/.test(formData.contactNumber.replace("+", "")))
-    newErrors.contactNumber = "Invalid phone number";
+    newErrors.contactNumber = "Invalid contact number";
 
-  if (!formData.emailAddress.trim())
-    newErrors.emailAddress = "Email address is required";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailAddress))
-    newErrors.emailAddress = "Invalid email format";
+  if (!formData.email.trim()) newErrors.email = "Email address is required";
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+    newErrors.email = "Invalid email format";
 
   if (!formData.birthDate) newErrors.birthDate = "Birth date is required";
   if (!formData.gender) newErrors.gender = "Gender is required";
@@ -33,17 +34,21 @@ const validate = (formData: FormData, selectedVehicle: string) => {
   return newErrors;
 };
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export default function Form() {
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     address: "",
     contactNumber: "",
-    emailAddress: "",
+    email: "",
     birthDate: "",
     gender: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(true);
 
   const handleChange = (
     e:
@@ -56,13 +61,54 @@ export default function Form() {
     });
   };
 
-  const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const formSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validate(formData, selectedVehicle);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      console.log("Form submitted:", formData, selectedVehicle);
+      try {
+        setLoading(true);
+        const res = await fetch(`${API_URL}/api/drivers`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...formData, vehicleType: selectedVehicle }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          setSuccess(true);
+
+          // clear all inputs after success
+          setFormData({
+            fullName: "",
+            address: "",
+            contactNumber: "+63",
+            email: "",
+            birthDate: "",
+            gender: "",
+          });
+          setSelectedVehicle("");
+          setErrors({});
+        } else if (res.status === 409) {
+          // duplicate registration
+          setErrors({ form: data.error || "Driver already registered." });
+          setSuccess(false);
+        } else {
+          // other server errors
+          setErrors({ form: data.error || "Server error, please try again." });
+          setSuccess(false);
+        }
+      } catch (err) {
+        console.error("Submit error:", err);
+        setErrors({ form: "Network error. Please try again later." });
+        setSuccess(false);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -112,7 +158,7 @@ export default function Form() {
           </div>
           <div className="space-y-2">
             <label className="block text-xs xl:text-sm font-semibold">
-              Mobile Number
+              Contact Number
             </label>
             <PhoneInput
               country="ph"
@@ -140,15 +186,15 @@ export default function Form() {
               Email Address
             </label>
             <input
-              type="text"
-              name="emailAddress"
+              type="email"
+              name="email"
               placeholder="Email Address:"
-              value={formData.emailAddress}
+              value={formData.email}
               onChange={handleChange}
               className="w-full px-4 py-2.5 xl:py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary text-sm"
             />
-            {errors.emailAddress && (
-              <p className="text-red-500 text-xs ml-2">{errors.emailAddress}</p>
+            {errors.email && (
+              <p className="text-red-500 text-xs ml-2">{errors.email}</p>
             )}
           </div>
 
@@ -229,14 +275,24 @@ export default function Form() {
           {errors.vehicle && (
             <p className="text-red-500 text-xs">{errors.vehicle}</p>
           )}
+
+          {errors.form && (
+            <p className="text-red-500 mt-5 text-center">{errors.form}</p>
+          )}
+
           <button
+            disabled={loading}
             type="submit"
-            className="w-full cursor-pointer py-3 mt-3 xl:mt-auto bg-primary text-white rounded-lg hover:bg-orange-500 transition-all duration-200"
+            className={`w-full py-3 mt-3 xl:mt-auto bg-primary text-white rounded-lg hover:bg-orange-500 transition-all duration-200 ${
+              loading ? "opacity-70 cursor-not-allowed" : "cursor-pointer"
+            }`}
           >
             Submit Driver's Pre-Registration
           </button>
         </div>
       </form>
+      <LoaderModal open={loading} />
+      <SuccessModal isOpen={success} setIsOpen={setSuccess} />
     </div>
   );
 }

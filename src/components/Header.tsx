@@ -1,6 +1,6 @@
-import {ArrowBigRight} from "lucide-react";
-import {logo} from "@/constants/images";
-import InfoModal from "./InfoModal";
+import { ArrowBigRight } from "lucide-react";
+import { logo } from "@/constants/images";
+import InfoModal from "./modals/InfoModal";
 
 export default function Header() {
   return (
