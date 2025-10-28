@@ -1,8 +1,9 @@
 import { VEHICLES } from "@/constants/images";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import LoaderModal from "../modals/Loader";
-import SuccessModal from "../modals/success";
+import SuccessModal from "../modals/Success";
+import ReCAPTCHA from "react-google-recaptcha";
 
 interface FormData {
   fullName: string;
@@ -48,7 +49,14 @@ export default function Form() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(true);
+  const [success, setSuccess] = useState(false);
+  const captchaRef = useRef<ReCAPTCHA>(null);
+
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
+
+  const onCaptchaChange = (value: string | null) => {
+    setCaptchaValue(value);
+  };
 
   const handleChange = (
     e:
@@ -63,10 +71,15 @@ export default function Form() {
 
   const formSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const validationErrors = validate(formData, selectedVehicle);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
+      if (!captchaValue) {
+        setErrors({ form: "Please verify the captcha." });
+        return;
+      }
       try {
         setLoading(true);
         const res = await fetch(`${API_URL}/api/drivers`, {
@@ -74,7 +87,11 @@ export default function Form() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...formData, vehicleType: selectedVehicle }),
+          body: JSON.stringify({
+            ...formData,
+            vehicleType: selectedVehicle,
+            captcha: captchaValue,
+          }),
         });
 
         const data = await res.json();
@@ -93,6 +110,8 @@ export default function Form() {
           });
           setSelectedVehicle("");
           setErrors({});
+          captchaRef.current?.reset();
+          setCaptchaValue("");
         } else if (res.status === 409) {
           // duplicate registration
           setErrors({ form: data.error || "Driver already registered." });
@@ -280,11 +299,23 @@ export default function Form() {
             <p className="text-red-500 mt-5 text-center">{errors.form}</p>
           )}
 
+          <div className="mt-5">
+            <ReCAPTCHA
+              ref={captchaRef}
+              sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+              onChange={onCaptchaChange}
+              theme="light"
+              size="normal"
+            />
+          </div>
+
           <button
-            disabled={loading}
+            disabled={loading || !captchaValue}
             type="submit"
-            className={`w-full py-3 mt-3 xl:mt-auto bg-primary text-white rounded-lg hover:bg-orange-500 transition-all duration-200 ${
-              loading ? "opacity-70 cursor-not-allowed" : "cursor-pointer"
+            className={`w-full py-3 mt-3 xl:mt-auto bg-primary text-white rounded-lg  transition-all duration-200 ${
+              loading || !captchaValue
+                ? "opacity-70 cursor-not-allowed"
+                : "cursor-pointer hover:bg-orange-500"
             }`}
           >
             Submit Driver's Pre-Registration
