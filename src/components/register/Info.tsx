@@ -17,7 +17,7 @@ export default function Info() {
         </p>
       </div>
 
-      <div className="space-y-4 hidden lg:block lg:mt-20 xl:mt-15 xl:ml-25 z-50">
+      <div className="space-y-4 hidden lg:block lg:mt-20 xl:mt-15 xl:ml-25 ">
         <h3 className="font-semibold text-center">Pre-Register Privileges:</h3>
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white rounded-lg border-2 border-orange-400 size-30 xl:size-24"></div>
