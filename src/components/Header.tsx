@@ -1,4 +1,3 @@
-import { ArrowBigRight } from "lucide-react";
 import { logo } from "@/constants/images";
 import InfoModal from "./modals/InfoModal";
 
@@ -14,9 +13,8 @@ export default function Header() {
           />
           <h1 className="font-bold text-sm lg:text-2xl">FastMet</h1>
         </div>
-        <div className="flex flex-row items-center gap-5">
-          <p className="font-semibold hidden md:block">Tap for more info</p>
-          <ArrowBigRight className="hidden md:block fill-primary text-primary size-8" />
+        <div className="flex flex-row items-center gap-4">
+          <p className="font-semibold">FAQs</p>
           <InfoModal />
         </div>
       </div>

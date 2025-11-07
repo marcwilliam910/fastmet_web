@@ -32,26 +32,9 @@ export default function SharedFooter() {
             </div>
           </div>
         </div>
-        {/* privileges */}
-        <div className="flex flex-col items-center lg:items-start gap-2">
-          <p className="text-white font-medium text-xs lg:text-sm">
-            Pre-Register Priviledges:
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="size-12 rounded-md bg-white border border-primary" />
-            <div className="size-12 rounded-md bg-white border border-primary" />
-            <div className="size-12 rounded-md bg-white border border-primary" />
-            <div className="size-12 rounded-md bg-white border border-primary" />
-            <div className="size-12 rounded-md bg-white border border-primary" />
-          </div>
-        </div>
       </div>
 
-      <div className="w-full bg-primary p-4 flex justify-center items-center">
-        <p className="text-white text-sm">
-          © 2025 FastMet. All rights reserved.
-        </p>
-      </div>
+      <p className="text-white text-sm">© 2025 FastMet. All rights reserved.</p>
     </footer>
   );
 }
