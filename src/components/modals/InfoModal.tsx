@@ -7,10 +7,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {Button} from "@/components/ui/button";
-import {motor, sedan, pickup, suv, rider, question} from "@/constants/images";
-import {Play} from "lucide-react";
-import {Link} from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { motor, sedan, pickup, suv, question } from "@/constants/images";
+import { Play } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function InfoModal() {
   return (
@@ -95,11 +95,6 @@ export default function InfoModal() {
             </DialogClose>
           </div>
         </div>
-        <img
-          src={rider}
-          alt="Rider"
-          className="absolute bottom-0 -left-19 hidden lg:block w-96 xl:w-[30rem] object-contain xl:-left-24"
-        />
       </DialogContent>
     </Dialog>
   );

@@ -10,6 +10,9 @@ import truck4 from "../assets/vehicle/truck4.png";
 import suv from "../assets/vehicle/suv.png";
 import logo from "../assets/logo.png";
 import question from "../assets/question.png";
+import reward from "../assets/reward.png";
+import reward_bg from "../assets/reward_bg.png";
+import box from "../assets/box.png";
 
 export {
   phoneBG,
@@ -24,6 +27,9 @@ export {
   question,
   truck2,
   truck4,
+  box,
+  reward,
+  reward_bg,
 };
 
 export const VEHICLES = [
