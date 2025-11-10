@@ -2,7 +2,7 @@ import {Truck, User} from "lucide-react";
 
 export default function SharedFooter() {
   return (
-    <footer className="bg-secondary flex flex-col items-center gap-8 w-full py-3 md:py-5">
+    <footer className="bg-secondary flex flex-col items-center gap-8 w-full py-3 md:py-5 mb-16">
       <h2 className="text-primary text-sm font-semibold md:text-xl text-center">
         "The future of your drive starts with one click. Pre-register."
       </h2>

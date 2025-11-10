@@ -1,4 +1,4 @@
-import Footer from "@/components/home/Footer";
+import Footer from "@/components/FixedFooter";
 import Info from "@/components/home/Info";
 import Phone from "@/components/home/Phone";
 import InfoModal from "@/components/modals/InfoModal";
@@ -10,8 +10,8 @@ import {
   truck2,
   truck4,
 } from "@/constants/images";
-import { Play } from "lucide-react";
-import { Link } from "react-router-dom";
+import {Play} from "lucide-react";
+import {Link} from "react-router-dom";
 
 export default function Home() {
   return (
@@ -21,7 +21,6 @@ export default function Home() {
           <Info />
           <Phone />
         </div>
-        <Footer />
       </section>
       <div className="space-y-5 md:space-y-10 py-10">
         <section className="p-4 lg:px-20 xl:px-40">
@@ -50,7 +49,7 @@ export default function Home() {
           {/* Left Side - Mockup */}
           <div
             className="lg:size-72 size-56 md:size-64 flex justify-center relative items-center bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${phoneBG})` }}
+            style={{backgroundImage: `url(${phoneBG})`}}
           >
             <div className="absolute bg-gradient-to-b from-[#FFD07F] to-primary rounded-full blur-2xl size-64 md:size-80 opacity-40" />
 
@@ -89,7 +88,7 @@ export default function Home() {
               </div>
 
               <Link
-                to="/register"
+                to="/driver-register"
                 className="border border-primary xl:text-lg text-primary bg-white cursor-pointer hover:bg-primary hover:text-white px-5 py-2 text-sm lg:text-base rounded-full font-medium transition inline-block"
               >
                 Driver's Pre-Registration
@@ -105,7 +104,7 @@ export default function Home() {
           {/* Left Side - Mockup */}
           <div
             className="lg:size-72 size-56 md:size-64 flex justify-center relative items-center bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${phoneBG})` }}
+            style={{backgroundImage: `url(${phoneBG})`}}
           >
             <div className="absolute bg-gradient-to-b from-[#FFD07F] to-primary rounded-full blur-2xl size-64 md:size-80 opacity-40" />
 
@@ -143,7 +142,7 @@ export default function Home() {
               </div>
 
               <Link
-                to="/register"
+                to="/user-register"
                 className="border border-primary xl:text-lg text-primary bg-white cursor-pointer hover:bg-primary hover:text-white px-5 py-2 text-sm lg:text-base rounded-full font-medium transition inline-block"
               >
                 User's Pre-Registration

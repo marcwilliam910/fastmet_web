@@ -1,6 +1,6 @@
-import { Facebook, MessageSquareMore, PhoneCall } from "lucide-react";
-import { Link } from "react-router-dom";
-import RewardModal from "../modals/RewardModal";
+import {Facebook, MessageSquareMore, PhoneCall} from "lucide-react";
+import {Link} from "react-router-dom";
+import RewardModal from "./modals/RewardModal";
 
 export default function Footer() {
   return (
@@ -9,13 +9,13 @@ export default function Footer() {
         <RewardModal />
         <Link
           className="px-4 hidden md:block py-2 rounded-full text-sm shadow-md bg-white font-bold xl:text-base xl:py-2.5 xl:px-5 hover:bg-zinc-100 transition-all duration-200"
-          to="/register"
+          to="/driver-register"
         >
           Driver's Pre-Registration
         </Link>
         <Link
           className="px-4 py-2 hidden md:block rounded-full text-sm shadow-md bg-white font-bold xl:text-base xl:py-2.5 xl:px-5 hover:bg-zinc-100 transition-all duration-200"
-          to="/register"
+          to="/user-register"
         >
           User's Pre-Registration
         </Link>
