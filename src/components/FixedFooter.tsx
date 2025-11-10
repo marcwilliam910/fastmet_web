@@ -6,7 +6,9 @@ export default function Footer() {
   return (
     <footer className="bg-primary fixed z-[999] bottom-0 left-0 right-0 h-16 w-full justify-around flex items-center">
       <div className="flex flex-row items-center gap-5">
-        <RewardModal />
+        <div>
+          <RewardModal />
+        </div>
         <Link
           className="px-4 hidden md:block py-2 rounded-full text-sm shadow-md bg-white font-bold xl:text-base xl:py-2.5 xl:px-5 hover:bg-zinc-100 transition-all duration-200"
           to="/driver-register"

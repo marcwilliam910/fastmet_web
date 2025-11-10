@@ -5,7 +5,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import {Button} from "../ui/button";
 import gift from "@/assets/gift.png";
 import {box, reward_bg, reward} from "@/constants/images";
 
@@ -13,9 +12,20 @@ export default function RewardModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="cursor-pointer ">
-          <img src={gift} className="size-12 " />
-        </Button>
+        <div className="flex items-center flex-col lg:relative -top-4">
+          <button className="cursor-pointer rounded-full border-t border-orange-500">
+            <img src={gift} className="size-12 object-contain xl:size-14" />
+          </button>
+          <p
+            className="hidden lg:block text-white text-xs xl:text-sm font-bold"
+            style={{
+              textShadow:
+                "0 1px 0 rgba(0,0,0,0.85), 0 -1px 0 rgba(0,0,0,0.85), 1px 0 0 rgba(0,0,0,0.85), -1px 0 0 rgba(0,0,0,0.85), 0 2px 6px rgba(0,0,0,0.6)",
+            }}
+          >
+            Pre-Registered Rewards
+          </p>
+        </div>
       </DialogTrigger>
 
       <DialogContent

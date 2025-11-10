@@ -1,4 +1,3 @@
-import Footer from "@/components/FixedFooter";
 import Info from "@/components/home/Info";
 import Phone from "@/components/home/Phone";
 import InfoModal from "@/components/modals/InfoModal";
