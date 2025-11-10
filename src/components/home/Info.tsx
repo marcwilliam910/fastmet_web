@@ -1,5 +1,6 @@
-import { motor, pickup, truck2, truck4 } from "@/constants/images";
+import {motor, pickup, truck2, truck4} from "@/constants/images";
 import megaphone from "../../assets/megaphone.png";
+import VehicleCarousel from "../VehicleCarousel";
 
 export default function Info() {
   return (
@@ -24,26 +25,9 @@ export default function Info() {
           schedule?
         </p>
       </div>
-      <div className="hidden flex-row gap-3 md:flex">
-        <Card image={motor} alt="Motorcycle" />
-        <Card image={pickup} alt="Pickup Truck" />
-        <Card image={truck2} alt="Sedan" />
-        <Card image={truck4} alt="SUV" />
+      <div className="hidden md:block">
+        <VehicleCarousel />
       </div>
     </div>
   );
 }
-
-const Card = ({ image, alt }: { image: string; alt: string }) => {
-  return (
-    <div className="p-[2px] rounded-2xl bg-gradient-to-b from-[#42FFEF] to-[#1F7CF6] shadow-md">
-      <div className="size-16 xl:size-36 lg:size-24 md:size-20 rounded-xl flex items-center justify-center bg-gradient-to-b from-[#E5FCFF] to-[#D9F3FF]">
-        <img
-          src={image}
-          alt={alt}
-          className="size-10 md:size-14 lg:size-16 xl:size-26 drop-shadow-md object-contain"
-        />
-      </div>
-    </div>
-  );
-};
