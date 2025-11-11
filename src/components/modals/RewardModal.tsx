@@ -14,7 +14,10 @@ export default function RewardModal() {
       <DialogTrigger asChild>
         <div className="flex items-center flex-col lg:relative -top-4">
           <button className="cursor-pointer rounded-full border-t border-orange-500">
-            <img src={gift} className="size-12 object-contain xl:size-14" />
+            <img
+              src={gift}
+              className="size-12 object-contain xl:size-14 hover:scale-110 transition-all duration-200"
+            />
           </button>
           <p
             className="hidden lg:block text-white text-xs xl:text-sm font-bold"

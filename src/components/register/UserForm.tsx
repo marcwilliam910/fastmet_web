@@ -79,7 +79,7 @@ export default function UserForm() {
 
       try {
         setLoading(true);
-        const res = await fetch(`${API_URL}/api/users`, {
+        const res = await fetch(`${API_URL}/api/users/pre-register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -247,7 +247,7 @@ export default function UserForm() {
             <p className="text-red-500 mt-5 text-center">{errors.form}</p>
           )}
 
-          <div className="mt-5">
+          <div className="mt-5 flex justify-center">
             <ReCAPTCHA
               ref={captchaRef}
               sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}

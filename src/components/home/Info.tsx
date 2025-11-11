@@ -1,4 +1,3 @@
-import {motor, pickup, truck2, truck4} from "@/constants/images";
 import megaphone from "../../assets/megaphone.png";
 import VehicleCarousel from "../VehicleCarousel";
 

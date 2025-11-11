@@ -125,9 +125,8 @@ export default function Home() {
             </h2>
 
             <p className="text-gray-700 text-justify indent-5 md:text-lg leading-relaxed">
-              Our new hailing rider app is launching soon, and we're looking for
-              the best drivers to pre-register now! Get your application in
-              early and be ready to drive the moment we launch.
+              Instant Reward: Every user who pre-registers before our launch
+              date will automatically receive a reward.
             </p>
 
             <div className="flex justify-center lg:justify-start items-center gap-3 md:gap-2">

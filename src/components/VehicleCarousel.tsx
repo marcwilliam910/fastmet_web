@@ -1,3 +1,4 @@
+import {useEffect, useState} from "react";
 import {
   Carousel,
   CarouselContent,
@@ -6,6 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import {motor, pickup, sedan, suv, truck2, truck4} from "@/constants/images";
+import type {CarouselApi} from "@/components/ui/carousel";
 
 const images = [
   {src: motor, alt: "Motorcycle"},
@@ -17,9 +19,21 @@ const images = [
 ];
 
 export default function VehicleCarousel() {
+  const [api, setApi] = useState<CarouselApi>();
+
+  useEffect(() => {
+    if (!api) return;
+
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [api]);
+
   return (
     <div className="w-full max-w-5xl mx-auto px-12">
-      <Carousel opts={{align: "start", loop: true}}>
+      <Carousel opts={{align: "start", loop: true}} setApi={setApi}>
         <CarouselContent className="-ml-2 md:max-w-md xl:max-w-lg">
           {images.map((img, index) => (
             <CarouselItem key={index} className="basis-1/3 pl-2">

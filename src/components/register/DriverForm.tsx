@@ -82,7 +82,7 @@ export default function DriverForm() {
       }
       try {
         setLoading(true);
-        const res = await fetch(`${API_URL}/api/drivers`, {
+        const res = await fetch(`${API_URL}/api/drivers/pre-register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
