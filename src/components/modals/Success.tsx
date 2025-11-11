@@ -15,7 +15,7 @@ export default function SuccessModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className=" md:max-w-2xl rounded-2xl p-6 md:p-10 flex flex-col items-center text-center gap-6 [&>button]:lg:scale-150">
+      <DialogContent className=" md:max-w-2xl rounded-2xl z-[999] p-6 md:p-10 flex flex-col items-center text-center gap-6 [&>button]:lg:scale-150">
         <DialogTitle className="text-2xl md:text-3xl font-bold text-primary">
           Congratulations!
         </DialogTitle>
