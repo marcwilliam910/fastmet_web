@@ -5,11 +5,14 @@ import single_phone from "../assets/single-phone.png";
 import motor from "../assets/vehicle/motor.png";
 import sedan from "../assets/vehicle/sedan.png";
 import pickup from "../assets/vehicle/pickup.png";
+import truck2 from "../assets/vehicle/truck2.png";
+import truck4 from "../assets/vehicle/truck4.png";
 import suv from "../assets/vehicle/suv.png";
 import logo from "../assets/logo.png";
 import question from "../assets/question.png";
-import rider from "../assets/rider.png";
-import border from "../assets/border.png";
+import reward from "../assets/reward.png";
+import reward_bg from "../assets/reward_bg.png";
+import box from "../assets/box.png";
 
 export {
   phoneBG,
@@ -22,8 +25,11 @@ export {
   suv,
   logo,
   question,
-  rider,
-  border,
+  truck2,
+  truck4,
+  box,
+  reward,
+  reward_bg,
 };
 
 export const VEHICLES = [

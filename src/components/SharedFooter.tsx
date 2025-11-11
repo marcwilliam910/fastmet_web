@@ -1,9 +1,9 @@
-import { Truck, User } from "lucide-react";
+import {Truck, User} from "lucide-react";
 
 export default function SharedFooter() {
   return (
-    <footer className="bg-secondary flex flex-col items-center gap-8 w-full py-3 md:py-5">
-      <h2 className="text-primary font-semibold md:text-xl text-center">
+    <footer className="bg-secondary flex flex-col items-center gap-8 w-full py-3 md:py-5 mb-16">
+      <h2 className="text-primary text-sm font-semibold md:text-xl text-center">
         "The future of your drive starts with one click. Pre-register."
       </h2>
       <div className="flex flex-col md:flex-row gap-5 items-center lg:gap-10">
@@ -32,26 +32,9 @@ export default function SharedFooter() {
             </div>
           </div>
         </div>
-        {/* privileges */}
-        <div className="flex flex-col items-center lg:items-start gap-2">
-          <p className="text-white font-medium text-xs lg:text-sm">
-            Pre-Register Priviledges:
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="size-12 rounded-md bg-white border border-primary" />
-            <div className="size-12 rounded-md bg-white border border-primary" />
-            <div className="size-12 rounded-md bg-white border border-primary" />
-            <div className="size-12 rounded-md bg-white border border-primary" />
-            <div className="size-12 rounded-md bg-white border border-primary" />
-          </div>
-        </div>
       </div>
 
-      <div className="w-full bg-primary p-4 flex justify-center items-center">
-        <p className="text-white text-sm">
-          © 2025 FastMet. All rights reserved.
-        </p>
-      </div>
+      <p className="text-white text-sm">© 2025 FastMet. All rights reserved.</p>
     </footer>
   );
 }

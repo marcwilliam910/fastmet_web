@@ -1,5 +1,5 @@
-import { VEHICLES } from "@/constants/images";
-import React, { useRef, useState } from "react";
+import {VEHICLES} from "@/constants/images";
+import React, {useRef, useState} from "react";
 import PhoneInput from "react-phone-input-2";
 import LoaderModal from "../modals/Loader";
 import SuccessModal from "../modals/Success";
@@ -37,7 +37,7 @@ const validate = (formData: FormData, selectedVehicle: string) => {
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export default function Form() {
+export default function DriverForm() {
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
@@ -77,12 +77,12 @@ export default function Form() {
 
     if (Object.keys(validationErrors).length === 0) {
       if (!captchaValue) {
-        setErrors({ form: "Please verify the captcha." });
+        setErrors({form: "Please verify the captcha."});
         return;
       }
       try {
         setLoading(true);
-        const res = await fetch(`${API_URL}/api/drivers`, {
+        const res = await fetch(`${API_URL}/api/drivers/pre-register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -114,16 +114,16 @@ export default function Form() {
           setCaptchaValue("");
         } else if (res.status === 409) {
           // duplicate registration
-          setErrors({ form: data.error || "Driver already registered." });
+          setErrors({form: data.error || "Driver already registered."});
           setSuccess(false);
         } else {
           // other server errors
-          setErrors({ form: data.error || "Server error, please try again." });
+          setErrors({form: data.error || "Server error, please try again."});
           setSuccess(false);
         }
       } catch (err) {
         console.error("Submit error:", err);
-        setErrors({ form: "Network error. Please try again later." });
+        setErrors({form: "Network error. Please try again later."});
         setSuccess(false);
       } finally {
         setLoading(false);
@@ -183,7 +183,7 @@ export default function Form() {
               country="ph"
               value={formData.contactNumber}
               onChange={(value) => {
-                setFormData({ ...formData, contactNumber: value });
+                setFormData({...formData, contactNumber: value});
               }}
               onlyCountries={["ph"]}
               countryCodeEditable={false} // lock +63 prefix

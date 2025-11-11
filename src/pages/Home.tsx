@@ -1,27 +1,25 @@
-import Footer from "@/components/home/Footer";
 import Info from "@/components/home/Info";
 import Phone from "@/components/home/Phone";
 import InfoModal from "@/components/modals/InfoModal";
 import {
   logo,
-  motor,
   phone_map,
   phoneBG,
-  sedan,
   single_phone,
+  truck2,
+  truck4,
 } from "@/constants/images";
-import { Play } from "lucide-react";
-import { Link } from "react-router-dom";
+import {Play} from "lucide-react";
+import {Link} from "react-router-dom";
 
 export default function Home() {
   return (
     <div className="flex items-center justify-center flex-col">
-      <section className="flex justify-center flex-col min-h-lvh w-full">
+      <section className="flex justify-center flex-col min-h-svh w-full">
         <div className="flex flex-col lg:flex-1 md:flex-row gap-8 items-center justify-center">
           <Info />
           <Phone />
         </div>
-        <Footer />
       </section>
       <div className="space-y-5 md:space-y-10 py-10">
         <section className="p-4 lg:px-20 xl:px-40">
@@ -50,7 +48,7 @@ export default function Home() {
           {/* Left Side - Mockup */}
           <div
             className="lg:size-72 size-56 md:size-64 flex justify-center relative items-center bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${phoneBG})` }}
+            style={{backgroundImage: `url(${phoneBG})`}}
           >
             <div className="absolute bg-gradient-to-b from-[#FFD07F] to-primary rounded-full blur-2xl size-64 md:size-80 opacity-40" />
 
@@ -60,9 +58,9 @@ export default function Home() {
               className="size-60 scale-125 lg:scale-150 object-contain"
             />
             <img
-              src={motor}
-              alt="Motorcycle"
-              className="size-24 lg:size-28 object-contain absolute -bottom-5 -right-5 z-10"
+              src={truck2}
+              alt="Truck"
+              className="w-24 lg:size-28 object-contain absolute -bottom-5 -right-5 z-10"
             />
           </div>
           {/* Right Side - Text Content */}
@@ -89,7 +87,7 @@ export default function Home() {
               </div>
 
               <Link
-                to="/register"
+                to="/driver-register"
                 className="border border-primary xl:text-lg text-primary bg-white cursor-pointer hover:bg-primary hover:text-white px-5 py-2 text-sm lg:text-base rounded-full font-medium transition inline-block"
               >
                 Driver's Pre-Registration
@@ -105,7 +103,7 @@ export default function Home() {
           {/* Left Side - Mockup */}
           <div
             className="lg:size-72 size-56 md:size-64 flex justify-center relative items-center bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${phoneBG})` }}
+            style={{backgroundImage: `url(${phoneBG})`}}
           >
             <div className="absolute bg-gradient-to-b from-[#FFD07F] to-primary rounded-full blur-2xl size-64 md:size-80 opacity-40" />
 
@@ -115,9 +113,9 @@ export default function Home() {
               className="size-60 scale-125 lg:scale-150 object-contain"
             />
             <img
-              src={sedan}
-              alt="Sedan"
-              className="size-24 md:size-32 scale-125 object-contain absolute -bottom-5 -right-5 z-10"
+              src={truck4}
+              alt="Truck"
+              className="size-24 md:size-28 lg:size-36 object-contain absolute -bottom-5 lg:-bottom-10 -right-2 z-10"
             />
           </div>
           {/* Right Side - Text Content */}
@@ -127,9 +125,8 @@ export default function Home() {
             </h2>
 
             <p className="text-gray-700 text-justify indent-5 md:text-lg leading-relaxed">
-              Our new hailing rider app is launching soon, and we're looking for
-              the best drivers to pre-register now! Get your application in
-              early and be ready to drive the moment we launch.
+              Instant Reward: Every user who pre-registers before our launch
+              date will automatically receive a reward.
             </p>
 
             <div className="flex justify-center lg:justify-start items-center gap-3 md:gap-2">
@@ -143,10 +140,10 @@ export default function Home() {
               </div>
 
               <Link
-                to="/register"
+                to="/user-register"
                 className="border border-primary xl:text-lg text-primary bg-white cursor-pointer hover:bg-primary hover:text-white px-5 py-2 text-sm lg:text-base rounded-full font-medium transition inline-block"
               >
-                Driver's Pre-Registration
+                User's Pre-Registration
               </Link>
               <InfoModal />
             </div>
