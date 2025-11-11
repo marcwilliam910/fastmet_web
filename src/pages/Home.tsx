@@ -52,16 +52,16 @@ export default function Home() {
           <Info />
           <Phone />
         </div>
-        <div className="bg-primary/90 h-16 absolute bottom-0 w-full md:gap-5 gap-2 justify-center flex items-center">
+        <div className="bg-primary/90 h-16 absolute bottom-0 w-full md:gap-5 gap-2 justify-center flex items-center z-20">
           <button
             onClick={scrollToDriver}
-            className="px-4 py-2 rounded-full md:text-sm shadow-md text-[.70rem] bg-white font-semibold md:font-bold xl:text-base xl:py-2.5 xl:px-5 hover:bg-zinc-200 hover:scale-110 transition-all duration-200"
+            className="px-4 cursor-pointer py-2 rounded-full md:text-sm shadow-md text-[.70rem] bg-white font-semibold md:font-bold xl:text-base xl:py-2.5 xl:px-5 hover:bg-zinc-200 hover:scale-110 transition-all duration-200"
           >
             Driver's Pre-Registration
           </button>
           <button
             onClick={scrollToUser}
-            className="px-4 py-2  rounded-full text-[.70rem] md:text-sm shadow-md bg-white font-semibold md:font-bold xl:text-base xl:py-2.5 xl:px-5 hover:bg-zinc-200 hover:scale-110 transition-all duration-200"
+            className="px-4 cursor-pointer py-2 rounded-full md:text-sm shadow-md text-[.70rem] bg-white font-semibold md:font-bold xl:text-base xl:py-2.5 xl:px-5 hover:bg-zinc-200 hover:scale-110 transition-all duration-200"
           >
             User's Pre-Registration
           </button>
