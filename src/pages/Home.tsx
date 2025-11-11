@@ -2,6 +2,7 @@ import Info from "@/components/home/Info";
 import Phone from "@/components/home/Phone";
 import InfoModal from "@/components/modals/InfoModal";
 import {
+  bg_map,
   logo,
   phone_map,
   phoneBG,
@@ -10,17 +11,63 @@ import {
   truck4,
 } from "@/constants/images";
 import {Play} from "lucide-react";
+import {useRef} from "react";
 import {Link} from "react-router-dom";
 
 export default function Home() {
+  const driverRef = useRef<HTMLDivElement>(null);
+  const userRef = useRef<HTMLDivElement>(null);
+
+  const scrollToDriver = () => {
+    if (driverRef.current) {
+      const offset = 60; // space from top in px
+      const top =
+        driverRef.current.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({top, behavior: "smooth"});
+    }
+  };
+
+  const scrollToUser = () => {
+    if (userRef.current) {
+      const offset = 100; // space from top in px
+      const top =
+        userRef.current.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({top, behavior: "smooth"});
+    }
+  };
+
   return (
     <div className="flex items-center justify-center flex-col">
-      <section className="flex justify-center flex-col min-h-svh w-full">
-        <div className="flex flex-col lg:flex-1 md:flex-row gap-8 items-center justify-center">
+      <section
+        className="flex relative justify-center flex-col min-h-dvh w-full"
+        style={{
+          backgroundImage: `url(${bg_map})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="absolute inset-0 bg-white/60" />
+
+        <div className="flex flex-col z-10 lg:flex-1 md:flex-row gap-8 items-center justify-center">
           <Info />
           <Phone />
         </div>
+        <div className="bg-primary/90 h-16 absolute bottom-0 w-full md:gap-5 gap-2 justify-center flex items-center">
+          <button
+            onClick={scrollToDriver}
+            className="px-4 py-2 rounded-full md:text-sm shadow-md text-[.70rem] bg-white font-semibold md:font-bold xl:text-base xl:py-2.5 xl:px-5 hover:bg-zinc-200 hover:scale-110 transition-all duration-200"
+          >
+            Driver's Pre-Registration
+          </button>
+          <button
+            onClick={scrollToUser}
+            className="px-4 py-2  rounded-full text-[.70rem] md:text-sm shadow-md bg-white font-semibold md:font-bold xl:text-base xl:py-2.5 xl:px-5 hover:bg-zinc-200 hover:scale-110 transition-all duration-200"
+          >
+            User's Pre-Registration
+          </button>
+        </div>
       </section>
+
       <div className="space-y-5 md:space-y-10 py-10">
         <section className="p-4 lg:px-20 xl:px-40">
           <div className=" p-4  bg-[linear-gradient(to_bottom,_#FFFFFF_30%,_#E0F2FF_100%)] flex flex-col gap-8 items-center justify-center">
@@ -43,8 +90,12 @@ export default function Home() {
             </p>
           </div>
         </section>
+
         {/* heads up drivers */}
-        <section className="flex xl:mx-40 flex-col md:flex-row items-center xl:px-20 xl:gap-16 gap-10 py-10 px-6 xl:py-16 md:mx-4 lg:mx-20 bg-gradient-to-br from-white to-[#FFF6ED] overflow-hidden">
+        <section
+          ref={driverRef}
+          className="flex xl:mx-40 flex-col md:flex-row items-center xl:px-20 xl:gap-16 gap-10 py-10 px-6 xl:py-16 md:mx-4 lg:mx-20 bg-gradient-to-br from-white to-[#FFF6ED] overflow-hidden"
+        >
           {/* Left Side - Mockup */}
           <div
             className="lg:size-72 size-56 md:size-64 flex justify-center relative items-center bg-cover bg-center bg-no-repeat"
@@ -99,7 +150,10 @@ export default function Home() {
         </section>
 
         {/* get ready */}
-        <section className="flex xl:mx-40 flex-col items-center xl:px-20 xl:gap-16 gap-10 py-10 px-6 xl:py-16 md:mx-4 lg:mx-20 bg-gradient-to-bl from-white to-[#FFF6ED] overflow-hidden md:flex-row-reverse">
+        <section
+          ref={userRef}
+          className="flex xl:mx-40 flex-col items-center xl:px-20 xl:gap-16 gap-10 py-10 px-6 xl:py-16 md:mx-4 lg:mx-20 bg-gradient-to-bl from-white to-[#FFF6ED] overflow-hidden md:flex-row-reverse"
+        >
           {/* Left Side - Mockup */}
           <div
             className="lg:size-72 size-56 md:size-64 flex justify-center relative items-center bg-cover bg-center bg-no-repeat"
@@ -115,7 +169,7 @@ export default function Home() {
             <img
               src={truck4}
               alt="Truck"
-              className="size-24 md:size-28 lg:size-36 object-contain absolute -bottom-5 lg:-bottom-10 -right-2 z-10"
+              className="size-24 md:size-28 lg:size-36 object-contain absolute -bottom-5 lg:-bottom-10 right-3 z-10"
             />
           </div>
           {/* Right Side - Text Content */}

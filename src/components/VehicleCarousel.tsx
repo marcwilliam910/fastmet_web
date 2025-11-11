@@ -54,7 +54,7 @@ const Card = ({image, alt}: {image: string; alt: string}) => {
       <img
         src={image}
         alt={alt}
-        className="w-3/5 h-3/5 md:h-16 md:w-24 lg:h-20 lg:w-28 xl:h-24 xl:w-32 drop-shadow-md object-contain"
+        className="h-12 w-16 md:h-16 md:w-24 lg:h-20 lg:w-28 xl:h-24 xl:w-32 drop-shadow-md object-contain"
       />
     </div>
   );

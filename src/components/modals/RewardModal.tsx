@@ -5,22 +5,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import gift from "@/assets/gift.png";
 import {box, reward_bg, reward} from "@/constants/images";
 
 export default function RewardModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex items-center flex-col lg:relative -top-4">
-          <button className="cursor-pointer rounded-full border-t border-orange-500">
-            <img
-              src={gift}
-              className="size-12 object-contain xl:size-14 hover:scale-110 transition-all duration-200"
-            />
-          </button>
+        <div className="flex items-center justify-center gap-1 flex-col fixed bottom-2 right-2 z-[100] cursor-pointer">
+          <div className="h-20 w-14 md:h-28 md:w-18 rounded-md border-2 border-primary bg-white shadow-lg" />
           <p
-            className="hidden lg:block text-white text-xs xl:text-sm font-bold"
+            className="hidden md:block text-white text-xs xl:text-sm font-bold"
             style={{
               textShadow:
                 "0 1px 0 rgba(0,0,0,0.85), 0 -1px 0 rgba(0,0,0,0.85), 1px 0 0 rgba(0,0,0,0.85), -1px 0 0 rgba(0,0,0,0.85), 0 2px 6px rgba(0,0,0,0.6)",

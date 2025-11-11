@@ -13,6 +13,7 @@ import question from "../assets/question.png";
 import reward from "../assets/reward.png";
 import reward_bg from "../assets/reward_bg.png";
 import box from "../assets/box.png";
+import bg_map from "../assets/bg-map.png";
 
 export {
   phoneBG,
@@ -30,11 +31,12 @@ export {
   box,
   reward,
   reward_bg,
+  bg_map,
 };
 
 export const VEHICLES = [
-  { id: "motorcycle", name: "Motorcycle", img: motor },
-  { id: "sedan", name: "Sedan", img: sedan },
-  { id: "pickup", name: "Pickup", img: pickup },
-  { id: "suv", name: "MPV/SUV", img: suv },
+  {id: "motorcycle", name: "Motorcycle", img: motor},
+  {id: "sedan", name: "Sedan", img: sedan},
+  {id: "pickup", name: "Pickup", img: pickup},
+  {id: "suv", name: "MPV/SUV", img: suv},
 ];
