@@ -4,7 +4,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { phone, phoneBG } from "@/constants/images";
+import {phone, phoneBG} from "@/constants/images";
 
 export default function SuccessModal({
   isOpen,
@@ -15,7 +15,7 @@ export default function SuccessModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className=" md:max-w-2xl rounded-2xl p-6 md:p-10 flex flex-col items-center text-center gap-6 [&>button]:lg:scale-150">
+      <DialogContent className=" md:max-w-2xl rounded-2xl z-[999] p-6 md:p-10 flex flex-col items-center text-center gap-6 [&>button]:lg:scale-150">
         <DialogTitle className="text-2xl md:text-3xl font-bold text-primary">
           Congratulations!
         </DialogTitle>
@@ -26,7 +26,7 @@ export default function SuccessModal({
 
         <div
           className="size-56 md:size-72 flex justify-center items-center bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${phoneBG})` }}
+          style={{backgroundImage: `url(${phoneBG})`}}
         >
           <img
             src={phone}
@@ -49,8 +49,8 @@ export default function SuccessModal({
             What Happens Next?
           </h3>
           <p className="text-sm md:text-base text-gray-700">
-            Our team is reviewing all driver submissions. Keep an eye on your
-            email (and check your spam folder). We’ll reach out soon.
+            Our team is reviewing all driver and user submissions. Keep an eye
+            on your email (and check your spam folder). We’ll reach out soon.
           </p>
         </div>
       </DialogContent>

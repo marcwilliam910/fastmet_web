@@ -1,4 +1,5 @@
-import {motor, phone, phoneBG, pickup, sedan, suv} from "@/constants/images";
+import {phone, phoneBG} from "@/constants/images";
+import VehicleCarousel from "../VehicleCarousel";
 
 export default function Phone() {
   return (
@@ -13,47 +14,8 @@ export default function Phone() {
           className="xl:size-[31rem] lg:size-96 size-60 md:size-80 object-contain"
         />
       </div>
-      <div className="flex flex-row gap-3 md:hidden">
-        {/* motor */}
-        <div className="p-[2px] rounded-2xl bg-gradient-to-b from-[#42FFEF] to-[#1F7CF6] shadow-md">
-          <div className="size-16 md:size-44 rounded-xl flex items-center justify-center bg-gradient-to-b from-[#E5FCFF] to-[#D9F3FF]">
-            <img
-              src={motor}
-              alt="Motorcycle"
-              className="size-10 md:size-16 drop-shadow-md object-contain"
-            />
-          </div>
-        </div>
-        {/* sedan */}
-        <div className="p-[2px] rounded-2xl bg-gradient-to-b from-[#42FFEF] to-[#1F7CF6] shadow-md">
-          <div className="size-16 md:size-44 rounded-xl flex items-center justify-center bg-gradient-to-b from-[#E5FCFF] to-[#D9F3FF]">
-            <img
-              src={sedan}
-              alt="Sedan"
-              className="size-10 md:size-16 drop-shadow-md object-contain scale-125"
-            />
-          </div>
-        </div>
-        {/* pickup */}
-        <div className="p-[2px] rounded-2xl bg-gradient-to-b from-[#42FFEF] to-[#1F7CF6] shadow-md">
-          <div className="size-16 md:size-44 rounded-xl flex items-center justify-center bg-gradient-to-b from-[#E5FCFF] to-[#D9F3FF]">
-            <img
-              src={pickup}
-              alt="Pickup Truck"
-              className="size-10 md:size-16 drop-shadow-md object-contain scale-125"
-            />
-          </div>
-        </div>
-        {/* suv */}
-        <div className="p-[2px] rounded-2xl bg-gradient-to-b from-[#42FFEF] to-[#1F7CF6] shadow-md">
-          <div className="size-16 md:size-44 rounded-xl flex items-center justify-center bg-gradient-to-b from-[#E5FCFF] to-[#D9F3FF]">
-            <img
-              src={suv}
-              alt="SUV"
-              className="size-10 md:size-16 drop-shadow-md object-contain scale-120"
-            />
-          </div>
-        </div>
+      <div className="md:hidden">
+        <VehicleCarousel />
       </div>
     </div>
   );
