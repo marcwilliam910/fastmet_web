@@ -12,9 +12,7 @@ import mpv_suv from "../assets/vehicles/mpv_suv.png";
 import l300 from "../assets/vehicles/fastmet_truck.png"; //placeholder
 import logo from "../assets/logo.png";
 import question from "../assets/question.png";
-import reward from "../assets/reward.png";
 import reward_bg from "../assets/reward_bg.png";
-import box from "../assets/box.png";
 import bg_map from "../assets/bg-map.png";
 import gift_close from "../assets/gift-close.png";
 import gift_open from "../assets/gift-open.png";
@@ -34,8 +32,6 @@ export {
   l300,
   logo,
   question,
-  box,
-  reward,
   reward_bg,
   bg_map,
   gift_close,

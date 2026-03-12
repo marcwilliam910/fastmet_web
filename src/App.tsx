@@ -30,7 +30,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <RegistrationCountProvider>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </RegistrationCountProvider>
   );
 }
