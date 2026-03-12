@@ -1,329 +1,556 @@
-import {VEHICLES} from "@/constants/images";
-import React, {useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import LoaderModal from "../modals/Loader";
 import SuccessModal from "../modals/Success";
 import ReCAPTCHA from "react-google-recaptcha";
+import { CheckCircle2, Loader2 } from "lucide-react";
+import OTPModal from "../modals/OTPModal";
 
-interface FormData {
-  fullName: string;
-  address: string;
-  contactNumber: string;
-  email: string;
-  birthDate: string;
-  gender: string;
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface ILoadVariant {
+  _id: string;
+  maxLoadKg: number;
+  isActive: boolean;
 }
 
-const validate = (formData: FormData, selectedVehicle: string) => {
-  const newErrors: Record<string, string> = {};
+interface IVehicleType {
+  _id: string;
+  name: string;
+  imageUrl: string;
+  variants: ILoadVariant[];
+}
 
-  if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
-  if (!formData.address.trim()) newErrors.address = "Address is required";
+interface FormData {
+  firstName: string;
+  lastName: string;
+  contactNumber: string;
+  email: string;
+}
+
+// ─── Validation ───────────────────────────────────────────────────────────────
+
+const validate = (
+  formData: FormData,
+  selectedVehicleId: string,
+  selectedVariantId: string,
+  activeVariants: ILoadVariant[],
+) => {
+  const errors: Record<string, string> = {};
+
+  if (!formData.firstName.trim()) errors.firstName = "First name is required";
+  if (!formData.lastName.trim()) errors.lastName = "Last name is required";
+
   if (!formData.contactNumber.trim())
-    newErrors.contactNumber = "Contact number is required";
+    errors.contactNumber = "Contact number is required";
   else if (!/^(63|0)\d{10}$/.test(formData.contactNumber.replace("+", "")))
-    newErrors.contactNumber = "Invalid contact number";
+    errors.contactNumber = "Invalid PH contact number";
 
-  if (!formData.email.trim()) newErrors.email = "Email address is required";
+  if (!formData.email.trim()) errors.email = "Email address is required";
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-    newErrors.email = "Invalid email format";
+    errors.email = "Invalid email format";
 
-  if (!formData.birthDate) newErrors.birthDate = "Birth date is required";
-  if (!formData.gender) newErrors.gender = "Gender is required";
-  if (!selectedVehicle) newErrors.vehicle = "Vehicle type is required";
+  if (!selectedVehicleId) errors.vehicle = "Please select a vehicle type";
+  else if (activeVariants.length > 1 && !selectedVariantId)
+    errors.variant = "Please select a load capacity";
 
-  return newErrors;
+  return errors;
 };
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export default function DriverForm() {
-  const [selectedVehicle, setSelectedVehicle] = useState("");
+  // Form
   const [formData, setFormData] = useState<FormData>({
-    fullName: "",
-    address: "",
+    firstName: "",
+    lastName: "",
     contactNumber: "",
     email: "",
-    birthDate: "",
-    gender: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const captchaRef = useRef<ReCAPTCHA>(null);
 
+  // Captcha
+  const captchaRef = useRef<ReCAPTCHA>(null);
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
 
-  const onCaptchaChange = (value: string | null) => {
-    setCaptchaValue(value);
+  // Vehicles
+  const [vehicles, setVehicles] = useState<IVehicleType[]>([]);
+  const [vehiclesLoading, setVehiclesLoading] = useState(true);
+  const [selectedVehicle, setSelectedVehicle] = useState<IVehicleType | null>(
+    null,
+  );
+  const [selectedVariantId, setSelectedVariantId] = useState("");
+
+  // OTP modal — only open/close lives here, everything else is inside OTPModal
+  const [otpModalOpen, setOtpModalOpen] = useState(false);
+
+  // ── Fetch vehicles ────────────────────────────────────────────────────────
+
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        setVehiclesLoading(true);
+        const res = await fetch(`${API_URL}/api/vehicles?fields=preregister`);
+        const data = await res.json();
+        const list: IVehicleType[] = Array.isArray(data)
+          ? data
+          : (data.data ?? []);
+        setVehicles(list);
+
+        if (list.length > 0) {
+          const first = list[0];
+          const firstActive = first.variants.filter((v) => v.isActive);
+          setSelectedVehicle(first);
+          setSelectedVariantId(
+            firstActive.length > 0 ? firstActive[0]._id : "",
+          );
+        }
+      } catch (err) {
+        console.error("Failed to fetch vehicles:", err);
+      } finally {
+        setVehiclesLoading(false);
+      }
+    };
+    fetchVehicles();
+  }, []);
+
+  // ── Handlers ──────────────────────────────────────────────────────────────
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleSelectVehicle = (vehicle: IVehicleType) => {
+    const active = vehicle.variants.filter((v) => v.isActive);
+    setSelectedVehicle(vehicle);
+    setSelectedVariantId(active.length > 0 ? active[0]._id : "");
+    setErrors((prev) => ({ ...prev, vehicle: "", variant: "" }));
   };
 
+  // ── Submit: validate → captcha → send OTP → open modal ────────────────────
   const formSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const validationErrors = validate(formData, selectedVehicle);
+    const activeVariants =
+      selectedVehicle?.variants.filter((v) => v.isActive) ?? [];
+    const validationErrors = validate(
+      formData,
+      selectedVehicle?._id ?? "",
+      selectedVariantId,
+      activeVariants,
+    );
     setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
 
-    if (Object.keys(validationErrors).length === 0) {
-      if (!captchaValue) {
-        setErrors({form: "Please verify the captcha."});
-        return;
+    if (!captchaValue) {
+      setErrors({ form: "Please complete the captcha." });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await fetch(`${API_URL}/api/auth/send-otp-web`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-User-Type": "driver", // or "client"
+        },
+        body: JSON.stringify({
+          phoneNumber: formData.contactNumber,
+          captcha: captchaValue,
+          email: formData.email,
+        }),
+      });
+
+      if (res.ok) {
+        setOtpModalOpen(true);
+      } else {
+        const d = await res.json();
+        setErrors({ form: d.error || "Failed to send OTP. Please try again." });
       }
-      try {
-        setLoading(true);
-        const res = await fetch(`${API_URL}/api/drivers/pre-register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...formData,
-            vehicleType: selectedVehicle,
-            captcha: captchaValue,
-          }),
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          setSuccess(true);
-
-          // clear all inputs after success
-          setFormData({
-            fullName: "",
-            address: "",
-            contactNumber: "+63",
-            email: "",
-            birthDate: "",
-            gender: "",
-          });
-          setSelectedVehicle("");
-          setErrors({});
-          captchaRef.current?.reset();
-          setCaptchaValue("");
-        } else if (res.status === 409) {
-          // duplicate registration
-          setErrors({form: data.error || "Driver already registered."});
-          setSuccess(false);
-        } else {
-          // other server errors
-          setErrors({form: data.error || "Server error, please try again."});
-          setSuccess(false);
-        }
-      } catch (err) {
-        console.error("Submit error:", err);
-        setErrors({form: "Network error. Please try again later."});
-        setSuccess(false);
-      } finally {
-        setLoading(false);
-      }
+    } catch {
+      setErrors({ form: "Network error. Please try again." });
+    } finally {
+      setLoading(false);
     }
   };
 
+  // ── OTP callbacks passed down to OTPModal ─────────────────────────────────
+  const handleVerify = async (
+    code: string,
+  ): Promise<{ success: boolean; error?: string }> => {
+    try {
+      // 1. Verify OTP — receives a short-lived token on success
+      const otpRes = await fetch(`${API_URL}/api/auth/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phoneNumber: formData.contactNumber,
+          otpCode: code,
+        }),
+      });
+
+      const otpData = await otpRes.json();
+
+      if (!otpRes.ok) {
+        return {
+          success: false,
+          error: otpData.error || "Incorrect code. Try again.",
+        };
+      }
+
+      const { verifyToken } = otpData; // short-lived JWT (10 min)
+
+      // 2. OTP passed — pre-register the driver
+      //    Token is forwarded in Authorization to prove OTP was verified server-side
+      const registerRes = await fetch(
+        `${API_URL}/api/register/register-driver`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${verifyToken}`,
+          },
+          body: JSON.stringify({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            contactNumber: formData.contactNumber,
+            email: formData.email,
+            vehicleId: selectedVehicle?._id,
+            vehicleVariantId: selectedVariantId || undefined,
+          }),
+        },
+      );
+
+      const registerData = await registerRes.json();
+
+      if (registerRes.ok) return { success: true };
+
+      return {
+        success: false,
+        error:
+          registerData.error ||
+          (registerRes.status === 409
+            ? "Driver already registered."
+            : "Server error. Please try again."),
+      };
+    } catch {
+      return { success: false, error: "Network error. Please try again." };
+    }
+  };
+
+  const handleResend = async () => {
+    await fetch(`${API_URL}/api/auth/send-otp-web`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-User-Type": "driver", // or "client"
+      },
+      body: JSON.stringify({
+        phoneNumber: formData.contactNumber,
+        captcha: captchaValue,
+        email: formData.email,
+      }),
+    });
+  };
+
+  const handleVerifySuccess = () => {
+    setOtpModalOpen(false);
+    setSuccess(true);
+    setFormData({
+      firstName: "",
+      lastName: "",
+      contactNumber: "+63",
+      email: "",
+    });
+    if (vehicles.length > 0) {
+      const first = vehicles[0];
+      const firstActive = first.variants.filter((v) => v.isActive);
+      setSelectedVehicle(first);
+      setSelectedVariantId(firstActive.length > 0 ? firstActive[0]._id : "");
+    } else {
+      setSelectedVehicle(null);
+      setSelectedVariantId("");
+    }
+    captchaRef.current?.reset();
+    setCaptchaValue("");
+    setErrors({});
+  };
+
+  // ── Derived ───────────────────────────────────────────────────────────────
+  const activeVariants =
+    selectedVehicle?.variants.filter((v) => v.isActive) ?? [];
+  const showVariants = activeVariants.length > 1;
+
   return (
-    <div className="w-full lg:flex-1 space-y-5 xl:flex-2">
-      <p className="font-semibold text-sm text-center md:text-base xl:text-xl">
-        Driver's Pre-Registration
-      </p>
-      <form
-        className="flex gap-4 flex-col xl:flex-row flex-1"
-        onSubmit={formSubmit}
-      >
-        <div className="space-y-4 flex-1">
-          <div className="space-y-2">
-            <label className="block text-xs xl:text-sm font-semibold">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              placeholder="Full name:"
-              value={formData.fullName}
-              onChange={handleChange}
-              className="w-full px-4 py-2.5 xl:py-3 border  rounded-lg focus:outline-none focus:border-primary text-sm
-                border-gray-300
-             "
-            />
-            {errors.fullName && (
-              <p className="text-red-500 text-xs ml-2">{errors.fullName}</p>
-            )}
+    <div className="flex items-center justify-center">
+      <div className="w-full lg:flex-1 max-w-2xl mx-auto lg:mx-0 px-4 lg:px-6">
+        <p className="font-semibold text-base md:text-lg lg:text-xl text-center mb-8 text-gray-900">
+          Driver's Pre-Registration
+        </p>
+
+        <form onSubmit={formSubmit} className="space-y-6">
+          {/* ── Name ─────────────────────────────────────────────────────── */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-2">
+              <label className="block text-sm font-semibold text-gray-900">
+                First Name
+              </label>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="Juan"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              />
+              {errors.firstName && (
+                <p className="text-red-500 text-xs">{errors.firstName}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="block text-sm font-semibold text-gray-900">
+                Last Name
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                placeholder="dela Cruz"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              />
+              {errors.lastName && (
+                <p className="text-red-500 text-xs">{errors.lastName}</p>
+              )}
+            </div>
           </div>
-          <div className="space-y-2">
-            <label className="block text-xs xl:text-sm font-semibold">
-              Address
-            </label>
-            <input
-              type="text"
-              name="address"
-              placeholder="Address:"
-              value={formData.address}
-              onChange={handleChange}
-              className="w-full px-4 py-2.5 xl:py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary text-sm"
-            />
-            {errors.address && (
-              <p className="text-red-500 text-xs ml-2">{errors.address}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <label className="block text-xs xl:text-sm font-semibold">
-              Contact Number
-            </label>
-            <PhoneInput
-              country="ph"
-              value={formData.contactNumber}
-              onChange={(value) => {
-                setFormData({...formData, contactNumber: value});
-              }}
-              onlyCountries={["ph"]}
-              countryCodeEditable={false} // lock +63 prefix
-              disableDropdown={true} // hide other flags
-              inputProps={{
-                maxLength: 15, // +63 plus 10 digits plus space = 15 chars total
-              }}
-              inputClass="!w-full !py-2.5 !xl:py-3 !px-12 !rounded-lg !text-sm !h-auto "
-              buttonClass="!border !border-gray-300 !rounded-l-lg"
-            />
-            {errors.contactNumber && (
-              <p className="text-red-500 text-xs ml-2">
-                {errors.contactNumber}
+
+          {/* ── Contact + Email ───────────────────────────────────────────── */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-2">
+              <label className="block text-sm font-semibold text-gray-900">
+                Contact Number
+              </label>
+              <PhoneInput
+                country="ph"
+                value={formData.contactNumber}
+                onChange={(value) => {
+                  setFormData((prev) => ({ ...prev, contactNumber: value }));
+                  if (errors.contactNumber)
+                    setErrors((prev) => ({ ...prev, contactNumber: "" }));
+                }}
+                onlyCountries={["ph"]}
+                countryCodeEditable={false}
+                disableDropdown
+                inputProps={{ maxLength: 15 }}
+                inputClass="!w-full !py-2.5 !px-12 !rounded-lg !text-sm !h-auto !border-gray-300"
+                buttonClass="!border !border-gray-300 !rounded-l-lg !bg-white"
+              />
+              {errors.contactNumber && (
+                <p className="text-red-500 text-xs">{errors.contactNumber}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="block text-sm font-semibold text-gray-900">
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                placeholder="juandelacruz@email.com"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs">{errors.email}</p>
+              )}
+              <p className="text-xs text-gray-500">
+                For your onboarding discussion via Google Meet
               </p>
-            )}
+            </div>
           </div>
-          <div className="space-y-2">
-            <label className="block text-xs xl:text-sm font-semibold">
-              Email Address
-            </label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address:"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2.5 xl:py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary text-sm"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs ml-2">{errors.email}</p>
+
+          {/* ── Vehicle type ──────────────────────────────────────────────── */}
+          <div className="space-y-3">
+            <div>
+              <label className="block text-sm font-semibold text-gray-900">
+                Vehicle Type
+              </label>
+              <p className="text-xs text-gray-500 mt-1">
+                Select the vehicle you'll use for FastMet deliveries
+              </p>
+            </div>
+
+            {vehiclesLoading ? (
+              <div className="flex items-center justify-center py-12 text-gray-400 gap-2">
+                <Loader2 className="size-5 animate-spin" />
+                <span className="text-sm">Loading vehicles…</span>
+              </div>
+            ) : vehicles.length === 0 ? (
+              <p className="text-sm text-gray-400 py-8 text-center">
+                No vehicles available at this time.
+              </p>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                {vehicles.map((vehicle) => {
+                  const isSelected = selectedVehicle?._id === vehicle._id;
+                  const active = vehicle.variants.filter((v) => v.isActive);
+                  const minLoad = active.length
+                    ? Math.max(...active.map((v) => v.maxLoadKg))
+                    : null;
+
+                  return (
+                    <button
+                      key={vehicle._id}
+                      type="button"
+                      onClick={() => handleSelectVehicle(vehicle)}
+                      className={`
+                        relative flex flex-col items-center justify-start gap-2
+                        p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer
+                        ${
+                          isSelected
+                            ? "border-primary bg-primary/5 shadow-md"
+                            : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm"
+                        }
+                      `}
+                    >
+                      {isSelected && (
+                        <CheckCircle2 className="absolute top-2 right-2 size-4 text-primary" />
+                      )}
+                      <img
+                        src={vehicle.imageUrl}
+                        alt={vehicle.name}
+                        className="h-12 w-full object-contain"
+                      />
+                      <div className="text-center w-full">
+                        <p
+                          className={`text-xs font-bold leading-tight ${isSelected ? "text-primary" : "text-gray-800"}`}
+                        >
+                          {vehicle.name}
+                        </p>
+                        {minLoad !== null && (
+                          <p className="text-[10px] text-gray-500 mt-0.5">
+                            up to {minLoad.toLocaleString()}kg
+                          </p>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {errors.vehicle && (
+              <p className="text-red-500 text-xs">{errors.vehicle}</p>
             )}
           </div>
 
-          <div className="space-y-2">
-            <label className="block text-xs xl:text-sm font-semibold">
-              Select Birth Date:
-            </label>
-            <input
-              type="date"
-              name="birthDate"
-              placeholder="Select birth date:"
-              value={formData.birthDate}
-              onChange={handleChange}
-              className="w-full px-4 py-2.5 xl:py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary text-sm"
-            />
-            {errors.birthDate && (
-              <p className="text-red-500 text-xs ml-2">{errors.birthDate}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <label className="block text-xs xl:text-sm font-semibold">
-              Gender:
-            </label>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="w-full px-4 py-2.5 xl:py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary text-sm"
-            >
-              <option value="" disabled>
-                Select Gender:
-              </option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          {errors.gender && (
-            <p className="text-red-500 text-xs ml-2">{errors.gender}</p>
-          )}
-        </div>
-
-        <div className="flex flex-col items-center  gap-3 pt-3 flex-1 xl:gap-8 xl:mx-10">
-          <div className="flex flex-col items-center">
-            <label className="text-sm font-semibold xl:text-base">
-              Select Vehicle Type
-            </label>
-            <p className="text-xs text-gray-600 xl:text-sm">
-              ( Use as your vehicle service for FastMet )
-            </p>
-          </div>
-          <div className="grid grid-cols-4 xl:grid-cols-2 gap-4 xl:gap-8">
-            {VEHICLES.map((vehicle) => (
-              <div
-                className="flex flex-col justify-center items-center gap-2 cursor-pointer"
-                key={vehicle.id}
-                onClick={() => setSelectedVehicle(vehicle.id)}
-              >
-                <div
-                  className={`size-16 md:size-24 xl:size-36 rounded-xl flex items-center justify-center shadow-lg ${
-                    selectedVehicle === vehicle.id
-                      ? "border-primary border-2"
-                      : "border-gray-300 border"
-                  }`}
-                >
-                  <img
-                    src={vehicle.img}
-                    alt={vehicle.name}
-                    className="size-8 md:size-14 xl:size-20 drop-shadow-md object-contain xl:scale-125"
-                  />
-                </div>
-                <p className="font-semibold md:text-sm text-xs">
-                  {vehicle.name}
+          {/* ── Variant selection ─────────────────────────────────────────── */}
+          {showVariants && (
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-semibold text-gray-900">
+                  Load Capacity
+                </label>
+                <p className="text-xs text-gray-500 mt-1">
+                  Select the max load for your {selectedVehicle?.name}
                 </p>
               </div>
-            ))}
-          </div>
-          {errors.vehicle && (
-            <p className="text-red-500 text-xs">{errors.vehicle}</p>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+                {activeVariants.map((variant) => {
+                  const isSelected = selectedVariantId === variant._id;
+                  return (
+                    <button
+                      key={variant._id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedVariantId(variant._id);
+                        if (errors.variant)
+                          setErrors((prev) => ({ ...prev, variant: "" }));
+                      }}
+                      className={`
+                        px-3 py-2.5 rounded-lg border-2 text-xs font-semibold
+                        transition-all duration-200 whitespace-nowrap cursor-pointer
+                        ${
+                          isSelected
+                            ? "border-primary bg-primary text-white shadow-md"
+                            : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
+                        }
+                      `}
+                    >
+                      {variant.maxLoadKg.toLocaleString()}kg
+                    </button>
+                  );
+                })}
+              </div>
+              {errors.variant && (
+                <p className="text-red-500 text-xs">{errors.variant}</p>
+              )}
+            </div>
           )}
 
+          {/* ── Form error ────────────────────────────────────────────────── */}
           {errors.form && (
-            <p className="text-red-500 mt-5 text-center">{errors.form}</p>
+            <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+              <p className="text-red-600 text-xs text-center">{errors.form}</p>
+            </div>
           )}
 
-          <div className="mt-5">
+          {/* ── Captcha + Submit ──────────────────────────────────────────── */}
+          <div className="flex flex-col items-center gap-4 pt-2">
             <ReCAPTCHA
               ref={captchaRef}
               sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-              onChange={onCaptchaChange}
+              onChange={setCaptchaValue}
               theme="light"
               size="normal"
             />
+            <button
+              type="submit"
+              disabled={loading || !captchaValue}
+              className={`
+                w-full py-3 rounded-lg font-semibold text-sm text-white transition-all duration-200
+                ${
+                  loading || !captchaValue
+                    ? "bg-primary opacity-60 cursor-not-allowed"
+                    : "bg-primary hover:bg-orange-500 cursor-pointer"
+                }
+              `}
+            >
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="size-4 animate-spin" />
+                  Sending OTP…
+                </span>
+              ) : (
+                "Submit Driver's Pre-Registration"
+              )}
+            </button>
           </div>
+        </form>
+      </div>
 
-          <button
-            disabled={loading || !captchaValue}
-            type="submit"
-            className={`w-full py-3 mt-3 xl:mt-auto bg-primary text-white rounded-lg  transition-all duration-200 ${
-              loading || !captchaValue
-                ? "opacity-70 cursor-not-allowed"
-                : "cursor-pointer hover:bg-orange-500"
-            }`}
-          >
-            Submit Driver's Pre-Registration
-          </button>
-        </div>
-      </form>
+      {/* ── OTP Modal ─────────────────────────────────────────────────────────── */}
+      <OTPModal
+        open={otpModalOpen}
+        onOpenChange={setOtpModalOpen}
+        phone={formData.contactNumber}
+        onVerify={handleVerify}
+        onVerifySuccess={handleVerifySuccess}
+        onResend={handleResend}
+      />
+
       <LoaderModal open={loading} />
-      <SuccessModal isOpen={success} setIsOpen={setSuccess} />
+      <SuccessModal isOpen={success} setIsOpen={setSuccess} userType="driver" />
     </div>
   );
 }

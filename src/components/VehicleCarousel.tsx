@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -6,16 +6,27 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import {motor, pickup, sedan, suv, truck2, truck4} from "@/constants/images";
-import type {CarouselApi} from "@/components/ui/carousel";
+import {
+  motor,
+  pickup,
+  sedan,
+  l300,
+  light_van,
+  closed_van,
+  wing_van,
+  mpv_suv,
+} from "@/constants/images";
+import type { CarouselApi } from "@/components/ui/carousel";
 
 const images = [
-  {src: motor, alt: "Motorcycle"},
-  {src: pickup, alt: "Pickup Truck"},
-  {src: suv, alt: "Van"},
-  {src: sedan, alt: "Tricycle"},
-  {src: truck4, alt: "SUV"},
-  {src: truck2, alt: "Sedan"},
+  { src: motor, alt: "Motorcycle" },
+  { src: pickup, alt: "Small Pickup" },
+  { src: sedan, alt: "Sedan" },
+  { src: l300, alt: "L300" },
+  { src: mpv_suv, alt: "MPV/SUV" },
+  { src: light_van, alt: "Light Van" },
+  { src: closed_van, alt: "Closed Van" },
+  { src: wing_van, alt: "Wing Van" },
 ];
 
 export default function VehicleCarousel() {
@@ -33,7 +44,7 @@ export default function VehicleCarousel() {
 
   return (
     <div className="w-full max-w-5xl mx-auto px-12">
-      <Carousel opts={{align: "start", loop: true}} setApi={setApi}>
+      <Carousel opts={{ align: "start", loop: true }} setApi={setApi}>
         <CarouselContent className="-ml-2 md:max-w-md xl:max-w-lg">
           {images.map((img, index) => (
             <CarouselItem key={index} className="basis-1/3 pl-2">
@@ -48,7 +59,7 @@ export default function VehicleCarousel() {
   );
 }
 
-const Card = ({image, alt}: {image: string; alt: string}) => {
+const Card = ({ image, alt }: { image: string; alt: string }) => {
   return (
     <div className="w-full aspect-square mx-auto rounded-xl flex items-center justify-center bg-white border border-primary shadow-md">
       <img

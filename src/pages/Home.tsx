@@ -7,12 +7,12 @@ import {
   phone_map,
   phoneBG,
   single_phone,
-  truck2,
-  truck4,
+  closed_van,
+  wing_van,
 } from "@/constants/images";
-import {Play} from "lucide-react";
-import {useRef} from "react";
-import {Link} from "react-router-dom";
+import { Play } from "lucide-react";
+import { useRef } from "react";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const driverRef = useRef<HTMLDivElement>(null);
@@ -23,7 +23,7 @@ export default function Home() {
       const offset = 60; // space from top in px
       const top =
         driverRef.current.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({top, behavior: "smooth"});
+      window.scrollTo({ top, behavior: "smooth" });
     }
   };
 
@@ -32,7 +32,7 @@ export default function Home() {
       const offset = 100; // space from top in px
       const top =
         userRef.current.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({top, behavior: "smooth"});
+      window.scrollTo({ top, behavior: "smooth" });
     }
   };
 
@@ -80,13 +80,14 @@ export default function Home() {
               <p className="font-semibold md:text-lg xl:text-2xl">FastMet</p>
             </div>
             <p className="text-justify indent-5 md:text-lg lg:px-10 xl:px-20">
-              Welcome to FastMet the ride-hailing application built for life in
-              motion. In the dynamic, fast-paced environment of the modern city,
-              time is your most valuable asset. We launched{" "}
+              Welcome to FastMet — the last-mile logistics application built for
+              life in motion. In the dynamic, fast-paced environment of the
+              modern city, time is your most valuable asset. We will launch{" "}
               <span className="font-semibold">FastMet</span> in{" "}
               <span className="font-semibold">Metro Manila</span> with a single,
               driving goal: to deliver the quickest, most reliable, and
-              technologically advanced transit solution available.
+              technologically advanced delivery solution for both senders and
+              couriers.
             </p>
           </div>
         </section>
@@ -99,7 +100,7 @@ export default function Home() {
           {/* Left Side - Mockup */}
           <div
             className="lg:size-72 size-56 md:size-64 flex justify-center relative items-center bg-cover bg-center bg-no-repeat"
-            style={{backgroundImage: `url(${phoneBG})`}}
+            style={{ backgroundImage: `url(${phoneBG})` }}
           >
             <div className="absolute bg-gradient-to-b from-[#FFD07F] to-primary rounded-full blur-2xl size-64 md:size-80 opacity-40" />
 
@@ -109,8 +110,8 @@ export default function Home() {
               className="size-60 scale-125 lg:scale-150 object-contain"
             />
             <img
-              src={truck2}
-              alt="Truck"
+              src={closed_van}
+              alt="Closed Van"
               className="w-24 lg:size-28 object-contain absolute -bottom-5 -right-5 z-10"
             />
           </div>
@@ -121,10 +122,10 @@ export default function Home() {
             </h2>
 
             <p className="text-gray-700 text-justify indent-5 md:text-lg leading-relaxed">
-              We’re gearing up to launch a brand-new hailing rider app and are
-              actively seeking qualified drivers for our pre-registration phase.
-              By signing up now, you'll be one of the first to be approved and
-              ready to earn once we go live.
+              We&apos;re gearing up to launch a brand-new delivery platform in
+              Metro Manila and are actively seeking qualified drivers for our
+              pre-registration phase. By signing up now, you&apos;ll be one of
+              the first to be onboarded and ready to earn once we go live.
             </p>
 
             <div className="flex justify-center lg:justify-start items-center gap-3 md:gap-2">
@@ -157,7 +158,7 @@ export default function Home() {
           {/* Left Side - Mockup */}
           <div
             className="lg:size-72 size-56 md:size-64 flex justify-center relative items-center bg-cover bg-center bg-no-repeat"
-            style={{backgroundImage: `url(${phoneBG})`}}
+            style={{ backgroundImage: `url(${phoneBG})` }}
           >
             <div className="absolute bg-gradient-to-b from-[#FFD07F] to-primary rounded-full blur-2xl size-64 md:size-80 opacity-40" />
 
@@ -167,8 +168,8 @@ export default function Home() {
               className="size-60 scale-125 lg:scale-150 object-contain"
             />
             <img
-              src={truck4}
-              alt="Truck"
+              src={wing_van}
+              alt="Wing Van"
               className="size-24 md:size-28 lg:size-36 object-contain absolute -bottom-5 lg:-bottom-10 right-3 z-10"
             />
           </div>

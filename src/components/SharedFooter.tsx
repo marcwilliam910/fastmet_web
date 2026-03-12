@@ -1,6 +1,9 @@
-import {Truck, User, Facebook, Instagram, Twitter} from "lucide-react";
+import { useRegistrationCountContext } from "@/context/RegisteredCountProvider";
+import { Truck, User, Facebook, Instagram, Twitter } from "lucide-react";
 
 export default function SharedFooter() {
+  const { driverCount, userCount } = useRegistrationCountContext();
+
   return (
     <footer className="bg-secondary flex flex-col items-center gap-8 w-full py-3 md:py-5">
       <h2 className="text-primary text-sm font-semibold md:text-xl text-center">
@@ -19,7 +22,7 @@ export default function SharedFooter() {
                 <div className="p-1.5 border border-primary bg-white rounded-md w-fit">
                   <Truck className="fill-primary text-secondary lg:size-7" />
                 </div>
-                <p className="text-white font-bold">50</p>
+                <p className="text-white font-bold">{driverCount}</p>
               </div>
             </div>
 
@@ -31,7 +34,7 @@ export default function SharedFooter() {
                 <div className="p-1.5 border border-primary bg-white rounded-md w-fit">
                   <User className="fill-primary text-secondary lg:size-7" />
                 </div>
-                <p className="text-white font-bold">500</p>
+                <p className="text-white font-bold">{userCount}</p>
               </div>
             </div>
           </div>

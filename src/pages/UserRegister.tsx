@@ -1,8 +1,8 @@
-import Info from "@/components/register/Info";
-import {useEffect} from "react";
-import {ChevronLeft} from "lucide-react";
-import {Link} from "react-router-dom";
+import { useEffect } from "react";
+import { ChevronLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 import UserForm from "@/components/register/UserForm";
+import InfoUser from "@/components/register/InfoUser";
 
 export default function UserRegister() {
   useEffect(() => {
@@ -13,9 +13,9 @@ export default function UserRegister() {
       <Link to="/" className="absolute left-3 top-20 md:top-25 z-10">
         <ChevronLeft className="text-primary size-7 lg:scale-150" />
       </Link>
-      <div className="flex flex-col items- xl:w-full gap-10 lg:flex-row pb-10 pt-20 md:pt-25 lg:pt-30">
+      <div className="grid grid-cols-1 items-center xl:w-full gap-10 lg:grid-cols-2 pb-10 pt-20 md:pt-25 lg:pt-30">
         <div className="bg-[#F2F5FA] hidden fixed z-[-10] top-0 bottom-0 lg:w-1/2 lg:block left-0" />
-        <Info />
+        <InfoUser />
         <UserForm />
       </div>
     </section>

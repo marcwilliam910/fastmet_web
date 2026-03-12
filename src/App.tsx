@@ -1,9 +1,10 @@
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import DriverRegister from "./pages/DriverRegister";
 import RootLayout from "./layout/RootLayout";
 import ErrorBoundary from "./pages/Error";
 import UserRegister from "./pages/UserRegister";
+import { RegistrationCountProvider } from "./context/RegisteredCountProvider";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <RegistrationCountProvider>
+      <RouterProvider router={router} />;
+    </RegistrationCountProvider>
+  );
 }
 
 export default App;
