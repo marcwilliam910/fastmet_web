@@ -5,8 +5,7 @@ import SuccessModal from "../modals/Success";
 import ReCAPTCHA from "react-google-recaptcha";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import OTPModal from "../modals/OTPModal";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import { driverRegistrationSchema } from "@/schemas/driverRegistration";
 
 interface ILoadVariant {
   _id: string;
@@ -28,41 +27,9 @@ interface FormData {
   email: string;
 }
 
-// ─── Validation ───────────────────────────────────────────────────────────────
-
-const validate = (
-  formData: FormData,
-  selectedVehicleId: string,
-  selectedVariantId: string,
-  activeVariants: ILoadVariant[],
-) => {
-  const errors: Record<string, string> = {};
-
-  if (!formData.firstName.trim()) errors.firstName = "First name is required";
-  if (!formData.lastName.trim()) errors.lastName = "Last name is required";
-
-  if (!formData.contactNumber.trim())
-    errors.contactNumber = "Contact number is required";
-  else if (!/^(63|0)\d{10}$/.test(formData.contactNumber.replace("+", "")))
-    errors.contactNumber = "Invalid PH contact number";
-
-  if (!formData.email.trim()) errors.email = "Email address is required";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-    errors.email = "Invalid email format";
-
-  if (!selectedVehicleId) errors.vehicle = "Please select a vehicle type";
-  else if (activeVariants.length > 1 && !selectedVariantId)
-    errors.variant = "Please select a load capacity";
-
-  return errors;
-};
-
 const API_URL = import.meta.env.VITE_API_URL;
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export default function DriverForm() {
-  // Form
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -84,11 +51,7 @@ export default function DriverForm() {
     null,
   );
   const [selectedVariantId, setSelectedVariantId] = useState("");
-
-  // OTP modal — only open/close lives here, everything else is inside OTPModal
   const [otpModalOpen, setOtpModalOpen] = useState(false);
-
-  // ── Fetch vehicles ────────────────────────────────────────────────────────
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -137,16 +100,30 @@ export default function DriverForm() {
   const formSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const parsed = driverRegistrationSchema.safeParse(formData);
+    if (!parsed.success) {
+      const fieldErrors: Record<string, string> = {};
+      parsed.error.issues.forEach((issue) => {
+        const field = issue.path[0] as string;
+        fieldErrors[field] = issue.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
+    // Vehicle validation (kept separate since it's not part of formData)
     const activeVariants =
       selectedVehicle?.variants.filter((v) => v.isActive) ?? [];
-    const validationErrors = validate(
-      formData,
-      selectedVehicle?._id ?? "",
-      selectedVariantId,
-      activeVariants,
-    );
-    setErrors(validationErrors);
-    if (Object.keys(validationErrors).length > 0) return;
+    const vehicleErrors: Record<string, string> = {};
+    if (!selectedVehicle)
+      vehicleErrors.vehicle = "Please select a vehicle type";
+    else if (activeVariants.length > 1 && !selectedVariantId)
+      vehicleErrors.variant = "Please select a load capacity";
+
+    if (Object.keys(vehicleErrors).length > 0) {
+      setErrors(vehicleErrors);
+      return;
+    }
 
     if (!captchaValue) {
       setErrors({ form: "Please complete the captcha." });

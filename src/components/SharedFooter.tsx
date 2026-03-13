@@ -70,7 +70,7 @@ export default function SharedFooter() {
       </div>
 
       <p className="text-white text-xs md:text-sm">
-        © 2025 FastMet. All rights reserved.
+        © 2026 FastMet. All rights reserved.
       </p>
     </footer>
   );

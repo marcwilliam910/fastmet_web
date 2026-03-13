@@ -5,8 +5,7 @@ import SuccessModal from "../modals/Success";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Loader2 } from "lucide-react";
 import OTPModal from "../modals/OTPModal";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import { userRegistrationSchema } from "@/schemas/userRegistration";
 
 interface FormData {
   firstName: string;
@@ -14,24 +13,6 @@ interface FormData {
   contactNumber: string;
   gender: string;
 }
-
-// ─── Validation ───────────────────────────────────────────────────────────────
-
-const validate = (formData: FormData) => {
-  const errors: Record<string, string> = {};
-
-  if (!formData.firstName.trim()) errors.firstName = "First name is required";
-  if (!formData.lastName.trim()) errors.lastName = "Last name is required";
-
-  if (!formData.contactNumber.trim())
-    errors.contactNumber = "Contact number is required";
-  else if (!/^(63|0)\d{10}$/.test(formData.contactNumber.replace("+", "")))
-    errors.contactNumber = "Invalid PH contact number";
-
-  if (!formData.gender) errors.gender = "Please select a gender";
-
-  return errors;
-};
 
 const GENDER_OPTIONS = [
   { value: "male", label: "Male" },
@@ -41,10 +22,7 @@ const GENDER_OPTIONS = [
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export default function UserForm() {
-  // Form
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -62,22 +40,25 @@ export default function UserForm() {
   // OTP modal — only open/close lives here
   const [otpModalOpen, setOtpModalOpen] = useState(false);
 
-  // ── Handlers ──────────────────────────────────────────────────────────────
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // ── Submit: validate → captcha → send OTP → open modal ────────────────────
-
   const formSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const validationErrors = validate(formData);
-    setErrors(validationErrors);
-    if (Object.keys(validationErrors).length > 0) return;
+    const parsed = userRegistrationSchema.safeParse(formData);
+    if (!parsed.success) {
+      const fieldErrors: Record<string, string> = {};
+      parsed.error.issues.forEach((issue) => {
+        const field = issue.path[0] as string;
+        fieldErrors[field] = issue.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
 
     if (!captchaValue) {
       setErrors({ form: "Please complete the captcha." });

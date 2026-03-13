@@ -108,11 +108,13 @@ export default function Home() {
               src={single_phone}
               alt="Phone Mockup"
               className="size-60 scale-125 lg:scale-150 object-contain"
+              draggable={false}
             />
             <img
               src={closed_van}
               alt="Closed Van"
               className="w-24 lg:size-28 object-contain absolute -bottom-5 -right-5 z-10"
+              draggable={false}
             />
           </div>
           {/* Right Side - Text Content */}
@@ -166,11 +168,13 @@ export default function Home() {
               src={phone_map}
               alt="Phone Mockup"
               className="size-60 scale-125 lg:scale-150 object-contain"
+              draggable={false}
             />
             <img
               src={wing_van}
               alt="Wing Van"
               className="size-24 md:size-28 lg:size-36 object-contain absolute -bottom-5 lg:-bottom-10 right-3 z-10"
+              draggable={false}
             />
           </div>
           {/* Right Side - Text Content */}

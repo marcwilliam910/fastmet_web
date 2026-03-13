@@ -1,0 +1,21 @@
+import { z } from "zod";
+
+export const userRegistrationSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, "First name is required")
+    .regex(/^[a-zA-Z\s\\-]+$/, "First name must contain letters only")
+    .max(20, "First name must be less than 20 characters"),
+  lastName: z
+    .string()
+    .min(1, "Last name is required")
+    .regex(/^[a-zA-Z\s\\-]+$/, "Last name must contain letters only")
+    .max(20, "Last name must be less than 20 characters"),
+  contactNumber: z
+    .string()
+    .min(1, "Contact number is required")
+    .regex(/^(63|0)\d{10}$/, "Invalid PH contact number"),
+  gender: z.string().min(1, "Please select a gender"),
+});
+
+export type UserRegistrationSchema = z.infer<typeof userRegistrationSchema>;
