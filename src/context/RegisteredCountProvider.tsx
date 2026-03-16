@@ -15,12 +15,9 @@ interface RegistrationCounts {
   refetch: () => Promise<void>;
 }
 
-const RegistrationCountContext = createContext<RegistrationCounts>({
-  driverCount: 0,
-  userCount: 0,
-  loading: true,
-  refetch: async () => {},
-});
+const RegistrationCountContext = createContext<RegistrationCounts | undefined>(
+  undefined,
+);
 
 export function RegistrationCountProvider({
   children,

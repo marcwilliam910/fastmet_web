@@ -5,6 +5,7 @@ import RootLayout from "./layout/RootLayout";
 import ErrorBoundary from "./pages/Error";
 import UserRegister from "./pages/UserRegister";
 import { RegistrationCountProvider } from "./context/RegisteredCountProvider";
+import { VehicleProvider } from "./context/VehiclesProvider";
 
 const router = createBrowserRouter([
   {
@@ -29,9 +30,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <RegistrationCountProvider>
-      <RouterProvider router={router} />
-    </RegistrationCountProvider>
+    <VehicleProvider>
+      <RegistrationCountProvider>
+        <RouterProvider router={router} />
+      </RegistrationCountProvider>
+    </VehicleProvider>
   );
 }
 

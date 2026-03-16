@@ -6,19 +6,10 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import OTPModal from "../modals/OTPModal";
 import { driverRegistrationSchema } from "@/schemas/driverRegistration";
-
-interface ILoadVariant {
-  _id: string;
-  maxLoadKg: number;
-  isActive: boolean;
-}
-
-interface IVehicleType {
-  _id: string;
-  name: string;
-  imageUrl: string;
-  variants: ILoadVariant[];
-}
+import {
+  useVehiclesContext,
+  type IVehicleType,
+} from "@/context/VehiclesProvider";
 
 interface FormData {
   firstName: string;
@@ -45,49 +36,23 @@ export default function DriverForm() {
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
 
   // Vehicles
-  const [vehicles, setVehicles] = useState<IVehicleType[]>([]);
-  const [vehiclesLoading, setVehiclesLoading] = useState(true);
   const [selectedVehicle, setSelectedVehicle] = useState<IVehicleType | null>(
     null,
   );
   const [selectedVariantId, setSelectedVariantId] = useState("");
   const [otpModalOpen, setOtpModalOpen] = useState(false);
 
+  const { loading: vehiclesLoading, vehicles } = useVehiclesContext();
+
   useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
-        setVehiclesLoading(true);
-        const params = new URLSearchParams({
-          fields: "_id,name,key,variants,imageUrl",
-          includeInactive: "false",
-        });
+    if (!selectedVehicle && vehicles.length > 0) {
+      const first = vehicles[0];
+      const firstActive = first.variants.filter((v) => v.isActive);
 
-        const res = await fetch(`${API_URL}/api/vehicles?${params.toString()}`);
-        const data = await res.json();
-        const list: IVehicleType[] = Array.isArray(data)
-          ? data
-          : (data.data ?? []);
-        console.log(list);
-        setVehicles(list);
-
-        if (list.length > 0) {
-          const first = list[0];
-          const firstActive = first.variants.filter((v) => v.isActive);
-          setSelectedVehicle(first);
-          setSelectedVariantId(
-            firstActive.length > 0 ? firstActive[0]._id : "",
-          );
-        }
-      } catch (err) {
-        console.error("Failed to fetch vehicles:", err);
-      } finally {
-        setVehiclesLoading(false);
-      }
-    };
-    fetchVehicles();
-  }, []);
-
-  // ── Handlers ──────────────────────────────────────────────────────────────
+      setSelectedVehicle(first);
+      setSelectedVariantId(firstActive.length > 0 ? firstActive[0]._id : "");
+    }
+  }, [selectedVehicle, vehicles]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -386,9 +351,13 @@ export default function DriverForm() {
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
                 {vehicles.map((vehicle) => {
                   const isSelected = selectedVehicle?._id === vehicle._id;
-                  const active = vehicle.variants.filter((v) => v.isActive);
-                  const minLoad = active.length
-                    ? Math.max(...active.map((v) => v.maxLoadKg))
+
+                  const activeVariants = vehicle.variants.filter(
+                    (v) => v.isActive,
+                  );
+
+                  const minLoad = activeVariants.length
+                    ? Math.max(...activeVariants.map((v) => v.maxLoadKg))
                     : null;
 
                   return (

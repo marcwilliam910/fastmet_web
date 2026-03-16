@@ -1,16 +1,20 @@
-import {Dialog, DialogContent, DialogDescription} from "@/components/ui/dialog";
-import {logo} from "@/constants/images";
-import {DialogTitle} from "@radix-ui/react-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { logo } from "@/constants/images";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 interface LoaderModalProps {
   open: boolean;
 }
 
-export default function LoaderModal({open}: LoaderModalProps) {
+export default function LoaderModal({ open }: LoaderModalProps) {
   return (
     <Dialog open={open}>
       <DialogContent
-        className="flex flex-col items-center z-[9999] justify-center bg-transparent border-none shadow-none"
+        className="flex flex-col items-center z-[9999] justify-center bg-transparent border-none shadow-none outline-none"
         showCloseButton={false}
       >
         <DialogDescription className="sr-only">
@@ -25,7 +29,7 @@ export default function LoaderModal({open}: LoaderModalProps) {
           />
         </div>
         <DialogTitle className="mt-5 lg:text-lg lg:mt-12 text-sm font-medium text-white">
-          Loading
+          Loading...
         </DialogTitle>
       </DialogContent>
     </Dialog>

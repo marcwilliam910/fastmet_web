@@ -1,6 +1,7 @@
 import Info from "@/components/home/Info";
 import Phone from "@/components/home/Phone";
 import InfoModal from "@/components/modals/InfoModal";
+import LoaderModal from "@/components/modals/Loader";
 import {
   bg_map,
   logo,
@@ -10,6 +11,8 @@ import {
   closed_van,
   wing_van,
 } from "@/constants/images";
+import { useRegistrationCountContext } from "@/context/RegisteredCountProvider";
+import { useVehiclesContext } from "@/context/VehiclesProvider";
 import { Play } from "lucide-react";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
@@ -17,6 +20,8 @@ import { Link } from "react-router-dom";
 export default function Home() {
   const driverRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
+  const { loading: vehiclesLoading } = useVehiclesContext();
+  const { loading: countsLoading } = useRegistrationCountContext();
 
   const scrollToDriver = () => {
     if (driverRef.current) {
@@ -209,6 +214,7 @@ export default function Home() {
           </div>
         </section>
       </div>
+      <LoaderModal open={countsLoading || vehiclesLoading} />
     </div>
   );
 }
