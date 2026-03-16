@@ -57,11 +57,17 @@ export default function DriverForm() {
     const fetchVehicles = async () => {
       try {
         setVehiclesLoading(true);
-        const res = await fetch(`${API_URL}/api/vehicles?fields=preregister`);
+        const params = new URLSearchParams({
+          fields: "_id,name,key,variants,imageUrl",
+          includeInactive: "false",
+        });
+
+        const res = await fetch(`${API_URL}/api/vehicles?${params.toString()}`);
         const data = await res.json();
         const list: IVehicleType[] = Array.isArray(data)
           ? data
           : (data.data ?? []);
+        console.log(list);
         setVehicles(list);
 
         if (list.length > 0) {
