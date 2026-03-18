@@ -1,5 +1,6 @@
 import { useRegistrationCountContext } from "@/context/RegisteredCountProvider";
-import { Truck, User, Facebook, Instagram, Twitter } from "lucide-react";
+import { Truck, User } from "lucide-react";
+import { SocialIcon } from "react-social-icons";
 
 export default function SharedFooter() {
   const { driverCount, userCount } = useRegistrationCountContext();
@@ -43,28 +44,31 @@ export default function SharedFooter() {
         {/* Social links */}
         <div className="flex flex-col items-center gap-3">
           <p className="text-white text-sm font-medium">Follow us on</p>
+
           <div className="flex gap-3">
-            <a
-              href="#"
-              aria-label="Facebook"
-              className="p-2.5 bg-white/10 backdrop-blur-sm rounded-full hover:bg-primary hover:scale-110 transition-all duration-300 group"
-            >
-              <Facebook className="size-5 md:size-6 text-white group-hover:text-secondary transition-colors" />
-            </a>
-            <a
-              href="#"
-              aria-label="Instagram"
-              className="p-2.5 bg-white/10 backdrop-blur-sm rounded-full hover:bg-primary hover:scale-110 transition-all duration-300 group"
-            >
-              <Instagram className="size-5 md:size-6 text-white group-hover:text-secondary transition-colors" />
-            </a>
-            <a
-              href="#"
-              aria-label="Twitter"
-              className="p-2.5 bg-white/10 backdrop-blur-sm rounded-full hover:bg-primary hover:scale-110 transition-all duration-300 group"
-            >
-              <Twitter className="size-5 md:size-6 text-white group-hover:text-secondary transition-colors" />
-            </a>
+            <SocialIcon
+              url="https://www.facebook.com/profile.php?id=61585768732620"
+              className="p-2.5 bg-white/10 backdrop-blur-sm rounded-full 
+                 hover:scale-110 hover:shadow-lg transition-all duration-300"
+              style={{ width: 36, height: 36 }}
+              target="_blank"
+            />
+
+            <SocialIcon
+              url="https://www.instagram.com/yourpage"
+              className="p-2.5 bg-white/10 backdrop-blur-sm rounded-full 
+                 hover:scale-110 hover:shadow-lg transition-all duration-300"
+              style={{ width: 36, height: 36 }}
+              target="_blank"
+            />
+
+            <SocialIcon
+              url="https://www.tiktok.com/@yourpage"
+              className="p-2.5 bg-white/10 backdrop-blur-sm rounded-full 
+                 hover:scale-110 hover:shadow-lg transition-all duration-300"
+              style={{ width: 36, height: 36 }}
+              target="_blank"
+            />
           </div>
         </div>
       </div>

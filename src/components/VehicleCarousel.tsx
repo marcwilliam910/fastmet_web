@@ -61,7 +61,7 @@ export default function VehicleCarousel() {
 
 const Card = ({ image, alt }: { image: string; alt: string }) => {
   return (
-    <div className="w-full aspect-square mx-auto rounded-xl flex items-center justify-center bg-white border border-primary shadow-md">
+    <div className="w-full aspect-square mx-auto rounded-xl flex items-center justify-center bg-white/20 border border-primary shadow-md">
       <img
         src={image}
         alt={alt}

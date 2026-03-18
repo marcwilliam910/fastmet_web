@@ -6,6 +6,8 @@ import ErrorBoundary from "./pages/Error";
 import UserRegister from "./pages/UserRegister";
 import { RegistrationCountProvider } from "./context/RegisteredCountProvider";
 import { VehicleProvider } from "./context/VehiclesProvider";
+import BlogPost from "./pages/blog/[slug]";
+import BlogList from "./pages/blog/index";
 
 const router = createBrowserRouter([
   {
@@ -24,10 +26,22 @@ const router = createBrowserRouter([
         path: "/user-register",
         element: <UserRegister />,
       },
+      {
+        path: "/blog",
+        children: [
+          {
+            index: true,
+            element: <BlogList />,
+          },
+          {
+            path: ":slug",
+            element: <BlogPost />,
+          },
+        ],
+      },
     ],
   },
 ]);
-
 function App() {
   return (
     <VehicleProvider>
