@@ -134,11 +134,7 @@ export default function UserForm() {
 
       return {
         success: false,
-        error:
-          registerData.error ||
-          (registerRes.status === 409
-            ? "User already registered."
-            : "Server error. Please try again."),
+        error: registerData.error ?? "Server error. Please try again.",
       };
     } catch {
       return { success: false, error: "Network error. Please try again." };

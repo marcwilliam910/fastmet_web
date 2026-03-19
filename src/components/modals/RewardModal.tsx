@@ -10,180 +10,26 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { gift_open, gift_close, reward_bg } from "@/constants/images";
 import { CheckCheck, Lock, Gift, ArrowLeft } from "lucide-react";
-import { useRegistrationCountContext } from "@/context/RegisteredCountProvider";
+import {
+  useRafflePrizes,
+  useRegistrationCounts,
+  useRewardTiers,
+} from "@/hooks/usePreRegQueries";
+import type { IRafflePrize, IRewardTier } from "@/types";
 
-interface Reward {
-  text: string;
-  vehicle: "2-wheel" | "4-6-wheel" | "all";
-}
-
-interface Level {
-  level: number;
-  label: string;
-  min: number;
-  max: number;
-  rewards: Reward[];
-}
-
-const DRIVER_LEVELS: Level[] = [
-  {
-    level: 1,
-    label: "First 50 Drivers",
-    min: 1,
-    max: 50,
-    rewards: [
-      { text: "₱1,000 bonus after completing your first trip", vehicle: "all" },
-      { text: "Founding Driver Badge", vehicle: "all" },
-      { text: "Fastmet Long Sleeve, Cap & Key Holder", vehicle: "2-wheel" },
-      { text: "Fastmet Polo Shirt, Cap & Key Holder", vehicle: "4-6-wheel" },
-    ],
-  },
-  {
-    level: 2,
-    label: "Drivers 51–100",
-    min: 51,
-    max: 100,
-    rewards: [
-      { text: "₱800 bonus after completing your first trip", vehicle: "all" },
-      { text: "Founding Driver Badge", vehicle: "all" },
-      { text: "Fastmet Long Sleeve", vehicle: "2-wheel" },
-      { text: "Fastmet Polo Shirt", vehicle: "4-6-wheel" },
-    ],
-  },
-  {
-    level: 3,
-    label: "Drivers 101–200",
-    min: 101,
-    max: 200,
-    rewards: [
-      { text: "₱500 bonus after completing your first trip", vehicle: "all" },
-      { text: "Founding Driver Badge", vehicle: "all" },
-      { text: "Fastmet Long Sleeve", vehicle: "2-wheel" },
-      { text: "Fastmet Polo Shirt", vehicle: "4-6-wheel" },
-    ],
-  },
-  {
-    level: 4,
-    label: "Drivers 201–300",
-    min: 201,
-    max: 300,
-    rewards: [
-      { text: "₱300 bonus after completing your first trip", vehicle: "all" },
-      { text: "Founding Driver Badge", vehicle: "all" },
-      { text: "Fastmet Long Sleeve", vehicle: "2-wheel" },
-      { text: "Fastmet Polo Shirt", vehicle: "4-6-wheel" },
-    ],
-  },
-  {
-    level: 5,
-    label: "Drivers 301–500",
-    min: 301,
-    max: 500,
-    rewards: [
-      { text: "₱200 bonus after completing your first trip", vehicle: "all" },
-      { text: "Founding Driver Badge", vehicle: "all" },
-      { text: "Fastmet Long Sleeve", vehicle: "2-wheel" },
-      { text: "Fastmet Polo Shirt", vehicle: "4-6-wheel" },
-    ],
-  },
-];
-
-const USER_LEVELS: Level[] = [
-  {
-    level: 1,
-    label: "First 100 Users",
-    min: 1,
-    max: 100,
-    rewards: [
-      { text: "₱300 worth of delivery voucher", vehicle: "all" },
-      { text: "Early User Badge", vehicle: "all" },
-      { text: "Entry to Launch Raffle (Grand Prize)", vehicle: "all" },
-    ],
-  },
-  {
-    level: 2,
-    label: "Users 101–300",
-    min: 101,
-    max: 300,
-    rewards: [
-      { text: "₱200 worth of delivery voucher", vehicle: "all" },
-      { text: "Early User Badge", vehicle: "all" },
-      { text: "Entry to Launch Raffle", vehicle: "all" },
-    ],
-  },
-  {
-    level: 3,
-    label: "Users 301–600",
-    min: 301,
-    max: 600,
-    rewards: [
-      { text: "₱150 worth of delivery voucher", vehicle: "all" },
-      { text: "Early User Badge", vehicle: "all" },
-      { text: "Entry to Launch Raffle", vehicle: "all" },
-    ],
-  },
-  {
-    level: 4,
-    label: "Users 601–800",
-    min: 601,
-    max: 800,
-    rewards: [
-      { text: "₱100 worth of delivery voucher", vehicle: "all" },
-      { text: "Early User Badge", vehicle: "all" },
-    ],
-  },
-  {
-    level: 5,
-    label: "Users 801–1000",
-    min: 801,
-    max: 1000,
-    rewards: [
-      { text: "₱75 worth of delivery voucher", vehicle: "all" },
-      { text: "Early User Badge", vehicle: "all" },
-    ],
-  },
-];
-
-const getCurrentLevelIndex = (count: number, levels: Level[]) => {
+const getCurrentLevelIndex = (count: number, levels: IRewardTier[]) => {
   const idx = levels.findIndex((l) => count >= l.min && count <= l.max);
   if (idx !== -1) return idx;
   return count > levels[levels.length - 1].max ? levels.length - 1 : 0;
 };
 
-const getLevelProgress = (count: number, level: Level) => {
+const getLevelProgress = (count: number, level: IRewardTier) => {
   if (count < level.min) return 0;
   if (count > level.max) return 100;
   return Math.round(
     ((count - level.min + 1) / (level.max - level.min + 1)) * 100,
   );
 };
-
-const rafflePrizes = [
-  {
-    rank: "Grand Prize",
-    winners: 1,
-    perks: [
-      { label: "Delivery Voucher", value: "₱500 × 2" },
-      { label: "Mobile Load Credit", value: "₱500" },
-    ],
-  },
-  {
-    rank: "2nd Prize",
-    winners: 5,
-    perks: [
-      { label: "Delivery Voucher", value: "₱500 × 1" },
-      { label: "Mobile Load Credit", value: "₱300" },
-    ],
-  },
-  {
-    rank: "3rd Prize",
-    winners: 10,
-    perks: [
-      { label: "Delivery Voucher", value: "₱200 × 1" },
-      { label: "Mobile Load Credit", value: "₱200" },
-    ],
-  },
-];
 
 // Presentation-only — swap/extend when data comes from DB
 const rankStyles = [
@@ -192,10 +38,15 @@ const rankStyles = [
   { num: "03", accent: "text-orange-400", dot: "bg-orange-400" },
 ];
 
-function RaffleView({ onBack }: { onBack: () => void }) {
+function RaffleView({
+  onBack,
+  prizes,
+}: {
+  onBack: () => void;
+  prizes: IRafflePrize[];
+}) {
   return (
     <div className="space-y-6">
-      {/* Back */}
       <button
         type="button"
         onClick={onBack}
@@ -205,7 +56,6 @@ function RaffleView({ onBack }: { onBack: () => void }) {
         Back
       </button>
 
-      {/* Header */}
       <div className="flex flex-col justify-center items-center">
         <p className="text-lg font-bold tracking-tight text-gray-900">
           Raffle Prizes
@@ -215,9 +65,8 @@ function RaffleView({ onBack }: { onBack: () => void }) {
         </p>
       </div>
 
-      {/* Prize list */}
       <div className="divide-y px-4 divide-gray-100">
-        {rafflePrizes.map(({ rank, winners, perks }, i) => {
+        {prizes.map(({ rank, winners, perks }, i) => {
           const style = rankStyles[i] ?? {
             num: `0${i + 1}`,
             accent: "text-gray-400",
@@ -226,24 +75,18 @@ function RaffleView({ onBack }: { onBack: () => void }) {
 
           return (
             <div key={rank} className="py-4 flex items-start gap-4">
-              {/* Rank number */}
               <span
                 className={`text-2xl font-black tabular-nums leading-none pt-0.5 w-7 shrink-0 ${style.accent}`}
               >
                 {style.num}
               </span>
-
-              {/* Body */}
               <div className="flex-1 space-y-3 min-w-0">
-                {/* Rank label + winner count */}
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-bold text-gray-900">{rank}</p>
                   <span className="text-[10px] text-gray-400 font-medium">
                     {winners} {winners === 1 ? "winner" : "winners"}
                   </span>
                 </div>
-
-                {/* Perks */}
                 <div className="space-y-1.5">
                   {perks.map(({ label, value }) => (
                     <div
@@ -268,7 +111,6 @@ function RaffleView({ onBack }: { onBack: () => void }) {
         })}
       </div>
 
-      {/* Disclaimer */}
       <p className="text-[11px] text-center text-gray-400 border-t border-gray-100 pt-4">
         All vouchers are for{" "}
         <span className="font-semibold text-gray-500">one-time use only</span>.
@@ -283,7 +125,7 @@ function RewardPanel({
   isFilled,
   isCurrent,
 }: {
-  levelData: Level;
+  levelData: IRewardTier;
   count: number;
   isFilled: boolean;
   isCurrent: boolean;
@@ -445,14 +287,16 @@ export function RewardTab({
   levels,
   count,
   showRaffle = false,
+  rafflePrizes = [],
 }: {
-  levels: Level[];
+  levels: IRewardTier[];
   count: number;
   showRaffle?: boolean;
+  rafflePrizes?: IRafflePrize[];
 }) {
   const currentLevelIndex = getCurrentLevelIndex(count, levels);
   const [selectedIndex, setSelectedIndex] = useState(currentLevelIndex);
-  const [view, setView] = useState<"rewards" | "raffle">("rewards"); // ← single view state
+  const [view, setView] = useState<"rewards" | "raffle">("rewards");
 
   useEffect(() => {
     setSelectedIndex(currentLevelIndex);
@@ -466,7 +310,7 @@ export function RewardTab({
     <div className="space-y-5">
       {/* ── Raffle view replaces everything below ────────────────────────── */}
       {view === "raffle" ? (
-        <RaffleView onBack={() => setView("rewards")} />
+        <RaffleView onBack={() => setView("rewards")} prizes={rafflePrizes} /> // ← pass prizes
       ) : (
         <>
           {/* ── Raffle banner ──────────────────────────────────────────────── */}
@@ -591,15 +435,30 @@ export function RewardTab({
 export default function RewardModal() {
   const [open, setOpen] = useState(false);
 
-  const { driverCount, userCount, loading, refetch } =
-    useRegistrationCountContext();
+  const { data: counts } = useRegistrationCounts();
+  const driverCount = counts?.drivers ?? 0;
+  const userCount = counts?.users ?? 0;
 
-  useEffect(() => {
-    if (!open) return;
-    refetch();
-  }, [open, refetch]);
+  const {
+    data: driverTiers,
+    isLoading: loadingDriverTiers,
+    isError: errorDriverTiers,
+  } = useRewardTiers("driver");
 
-  if (loading) return null;
+  const {
+    data: userTiers,
+    isLoading: loadingUserTiers,
+    isError: errorUserTiers,
+  } = useRewardTiers("user");
+
+  const {
+    data: rafflePrizes,
+    isLoading: loadingRaffle,
+    isError: errorRaffle,
+  } = useRafflePrizes();
+
+  const isLoading = loadingDriverTiers || loadingUserTiers || loadingRaffle;
+  const isError = errorDriverTiers || errorUserTiers || errorRaffle;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -641,8 +500,6 @@ export default function RewardModal() {
           style={{
             backgroundImage: `url(${reward_bg})`,
             backgroundSize: "contain",
-            // backgroundPosition: "center",
-            // backgroundRepeat: "no-repeat",
           }}
         >
           <div className="absolute inset-0 bg-black/45" />
@@ -658,29 +515,43 @@ export default function RewardModal() {
 
         {/* Content */}
         <div className="bg-gray-50 px-4 pb-6 pt-4">
-          <Tabs defaultValue="driver">
-            <TabsList className="w-full bg-white border border-gray-200 rounded-lg p-1 mb-5 h-auto">
-              <TabsTrigger
-                value="driver"
-                className="flex-1 text-xs font-semibold py-2 data-[state=active]:bg-primary data-[state=active]:text-white rounded-md transition-all"
-              >
-                🚗 Driver Rewards
-              </TabsTrigger>
-              <TabsTrigger
-                value="user"
-                className="flex-1 text-xs font-semibold py-2 data-[state=active]:bg-primary data-[state=active]:text-white rounded-md transition-all"
-              >
-                📦 User Rewards
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="driver">
-              <RewardTab levels={DRIVER_LEVELS} count={driverCount} />
-            </TabsContent>
-            <TabsContent value="user">
-              <RewardTab levels={USER_LEVELS} count={userCount} showRaffle />
-              {/* ← added */}
-            </TabsContent>
-          </Tabs>
+          {isLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="size-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : isError ? (
+            <p className="text-sm text-red-400 text-center py-12">
+              Failed to load rewards. Please try again later.
+            </p>
+          ) : (
+            <Tabs defaultValue="driver">
+              <TabsList className="w-full bg-white border border-gray-200 rounded-lg p-1 mb-5 h-auto">
+                <TabsTrigger
+                  value="driver"
+                  className="flex-1 text-xs font-semibold py-2 data-[state=active]:bg-primary data-[state=active]:text-white rounded-md transition-all"
+                >
+                  🚗 Driver Rewards
+                </TabsTrigger>
+                <TabsTrigger
+                  value="user"
+                  className="flex-1 text-xs font-semibold py-2 data-[state=active]:bg-primary data-[state=active]:text-white rounded-md transition-all"
+                >
+                  📦 User Rewards
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="driver">
+                <RewardTab levels={driverTiers ?? []} count={driverCount} />
+              </TabsContent>
+              <TabsContent value="user">
+                <RewardTab
+                  levels={userTiers ?? []}
+                  count={userCount}
+                  showRaffle
+                  rafflePrizes={rafflePrizes ?? []}
+                />
+              </TabsContent>
+            </Tabs>
+          )}
         </div>
       </DialogContent>
     </Dialog>

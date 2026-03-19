@@ -1,54 +1,46 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import DriverRegister from "./pages/DriverRegister";
 import RootLayout from "./layout/RootLayout";
 import ErrorBoundary from "./pages/Error";
 import UserRegister from "./pages/UserRegister";
-import { RegistrationCountProvider } from "./context/RegisteredCountProvider";
-import { VehicleProvider } from "./context/VehiclesProvider";
 import BlogPost from "./pages/blog/[slug]";
 import BlogList from "./pages/blog/index";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+      retry: 1,
+    },
+  },
+});
 
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
     errorElement: <ErrorBoundary />,
     children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/driver-register",
-        element: <DriverRegister />,
-      },
-      {
-        path: "/user-register",
-        element: <UserRegister />,
-      },
+      { path: "/", element: <Home /> },
+      { path: "/driver-register", element: <DriverRegister /> },
+      { path: "/user-register", element: <UserRegister /> },
       {
         path: "/blog",
         children: [
-          {
-            index: true,
-            element: <BlogList />,
-          },
-          {
-            path: ":slug",
-            element: <BlogPost />,
-          },
+          { index: true, element: <BlogList /> },
+          { path: ":slug", element: <BlogPost /> },
         ],
       },
     ],
   },
 ]);
+
 function App() {
   return (
-    <VehicleProvider>
-      <RegistrationCountProvider>
-        <RouterProvider router={router} />
-      </RegistrationCountProvider>
-    </VehicleProvider>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 }
 

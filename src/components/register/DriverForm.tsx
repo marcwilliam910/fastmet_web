@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import LoaderModal from "../modals/Loader";
 import SuccessModal from "../modals/Success";
@@ -6,10 +6,8 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import OTPModal from "../modals/OTPModal";
 import { driverRegistrationSchema } from "@/schemas/driverRegistration";
-import {
-  useVehiclesContext,
-  type IVehicleType,
-} from "@/context/VehiclesProvider";
+import { type IVehicleType } from "@/context/VehiclesProvider";
+import { useVehicles } from "@/hooks/usePreRegQueries";
 
 interface FormData {
   firstName: string;
@@ -42,7 +40,9 @@ export default function DriverForm() {
   const [selectedVariantId, setSelectedVariantId] = useState("");
   const [otpModalOpen, setOtpModalOpen] = useState(false);
 
-  const { loading: vehiclesLoading, vehicles } = useVehiclesContext();
+  const { data: vehiclesData } = useVehicles();
+
+  const vehicles = useMemo(() => vehiclesData ?? [], [vehiclesData]);
 
   useEffect(() => {
     if (!selectedVehicle && vehicles.length > 0) {
@@ -182,11 +182,7 @@ export default function DriverForm() {
 
       return {
         success: false,
-        error:
-          registerData.error ||
-          (registerRes.status === 409
-            ? "Driver already registered."
-            : "Server error. Please try again."),
+        error: registerData.error ?? "Server error. Please try again.",
       };
     } catch {
       return { success: false, error: "Network error. Please try again." };
@@ -337,13 +333,7 @@ export default function DriverForm() {
                 Select the vehicle you'll use for FastMet deliveries
               </p>
             </div>
-
-            {vehiclesLoading ? (
-              <div className="flex items-center justify-center py-12 text-gray-400 gap-2">
-                <Loader2 className="size-5 animate-spin" />
-                <span className="text-sm">Loading vehicles…</span>
-              </div>
-            ) : vehicles.length === 0 ? (
+            {vehicles.length === 0 ? (
               <p className="text-sm text-gray-400 py-8 text-center">
                 No vehicles available at this time.
               </p>
@@ -400,7 +390,6 @@ export default function DriverForm() {
                 })}
               </div>
             )}
-
             {errors.vehicle && (
               <p className="text-red-500 text-xs">{errors.vehicle}</p>
             )}

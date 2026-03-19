@@ -1,9 +1,9 @@
-import { useRegistrationCountContext } from "@/context/RegisteredCountProvider";
+import { useRegistrationCounts } from "@/hooks/usePreRegQueries";
 import { Truck, User } from "lucide-react";
 import { SocialIcon } from "react-social-icons";
 
 export default function SharedFooter() {
-  const { driverCount, userCount } = useRegistrationCountContext();
+  const { data: counts } = useRegistrationCounts();
 
   return (
     <footer className="bg-secondary flex flex-col items-center gap-8 w-full py-3 md:py-5">
@@ -23,7 +23,7 @@ export default function SharedFooter() {
                 <div className="p-1.5 border border-primary bg-white rounded-md w-fit">
                   <Truck className="fill-primary text-secondary lg:size-7" />
                 </div>
-                <p className="text-white font-bold">{driverCount}</p>
+                <p className="text-white font-bold">{counts?.drivers ?? 0}</p>
               </div>
             </div>
 
@@ -35,7 +35,7 @@ export default function SharedFooter() {
                 <div className="p-1.5 border border-primary bg-white rounded-md w-fit">
                   <User className="fill-primary text-secondary lg:size-7" />
                 </div>
-                <p className="text-white font-bold">{userCount}</p>
+                <p className="text-white font-bold">{counts?.users ?? 0}</p>
               </div>
             </div>
           </div>
