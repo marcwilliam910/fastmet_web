@@ -6,8 +6,9 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import OTPModal from "../modals/OTPModal";
 import { driverRegistrationSchema } from "@/schemas/driverRegistration";
-import { type IVehicleType } from "@/context/VehiclesProvider";
-import { useVehicles } from "@/hooks/usePreRegQueries";
+import { useVehicles } from "@/hooks/useVehicleQueries";
+import { formatPHNumber } from "@/helper/format";
+import type { IVehicleType } from "@/types/vehicle";
 
 interface FormData {
   firstName: string;
@@ -287,13 +288,32 @@ export default function DriverForm() {
                 value={formData.contactNumber}
                 onChange={(value) => {
                   setFormData((prev) => ({ ...prev, contactNumber: value }));
-                  if (errors.contactNumber)
+
+                  if (errors.contactNumber) {
                     setErrors((prev) => ({ ...prev, contactNumber: "" }));
+                  }
                 }}
                 onlyCountries={["ph"]}
                 countryCodeEditable={false}
                 disableDropdown
-                inputProps={{ maxLength: 15 }}
+                inputProps={{
+                  maxLength: 15,
+                  onPaste: (e: React.ClipboardEvent<HTMLInputElement>) => {
+                    e.preventDefault();
+
+                    const pasted = e.clipboardData.getData("text");
+                    const formatted = formatPHNumber(pasted);
+
+                    setFormData((prev) => ({
+                      ...prev,
+                      contactNumber: formatted,
+                    }));
+
+                    if (errors.contactNumber) {
+                      setErrors((prev) => ({ ...prev, contactNumber: "" }));
+                    }
+                  },
+                }}
                 inputClass="!w-full !py-2.5 !px-12 !rounded-lg !text-sm !h-auto !border-gray-300"
                 buttonClass="!border !border-gray-300 !rounded-l-lg !bg-white"
               />

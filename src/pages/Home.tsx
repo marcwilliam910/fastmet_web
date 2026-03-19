@@ -11,8 +11,9 @@ import {
   closed_van,
   wing_van,
 } from "@/constants/images";
+import { useRegistrationCounts } from "@/hooks/useRegistrationQueries";
 
-import { useRegistrationCounts, useVehicles } from "@/hooks/usePreRegQueries";
+import { useVehicles } from "@/hooks/useVehicleQueries";
 import { Play } from "lucide-react";
 import { useRef } from "react";
 import { Link } from "react-router-dom";

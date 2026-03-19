@@ -14,6 +14,6 @@ export const driverRegistrationSchema = z.object({
   contactNumber: z
     .string()
     .min(1, "Contact number is required")
-    .regex(/^(63|0)\d{10}$/, "Invalid PH contact number"),
+    .regex(/^639\d{9}$/, "Invalid PH contact number"),
   email: z.email("Invalid email address").min(1, "Email is required"),
 });

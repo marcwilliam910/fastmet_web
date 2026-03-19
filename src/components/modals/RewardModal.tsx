@@ -10,12 +10,10 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { gift_open, gift_close, reward_bg } from "@/constants/images";
 import { CheckCheck, Lock, Gift, ArrowLeft } from "lucide-react";
-import {
-  useRafflePrizes,
-  useRegistrationCounts,
-  useRewardTiers,
-} from "@/hooks/usePreRegQueries";
-import type { IRafflePrize, IRewardTier } from "@/types";
+
+import { useRegistrationCounts } from "@/hooks/useRegistrationQueries";
+import { useRafflePrizes, useRewardTiers } from "@/hooks/useRewardQueries";
+import type { IRafflePrize, IRewardTier } from "@/types/reward";
 
 const getCurrentLevelIndex = (count: number, levels: IRewardTier[]) => {
   const idx = levels.findIndex((l) => count >= l.min && count <= l.max);

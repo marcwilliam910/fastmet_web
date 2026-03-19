@@ -6,6 +6,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Loader2 } from "lucide-react";
 import OTPModal from "../modals/OTPModal";
 import { userRegistrationSchema } from "@/schemas/userRegistration";
+import { formatPHNumber } from "@/helper/format";
 
 interface FormData {
   firstName: string;
@@ -222,14 +223,29 @@ export default function UserForm() {
                 country="ph"
                 value={formData.contactNumber}
                 onChange={(value) => {
-                  setFormData((prev) => ({ ...prev, contactNumber: value }));
-                  if (errors.contactNumber)
-                    setErrors((prev) => ({ ...prev, contactNumber: "" }));
+                  // IMPORTANT: do not reformat here aggressively
+                  setFormData((prev) => ({
+                    ...prev,
+                    contactNumber: value,
+                  }));
+                }}
+                inputProps={{
+                  maxLength: 15,
+                  onPaste: (e: React.ClipboardEvent<HTMLInputElement>) => {
+                    e.preventDefault();
+
+                    const pasted = e.clipboardData.getData("Text");
+                    const formatted = formatPHNumber(pasted);
+
+                    setFormData((prev) => ({
+                      ...prev,
+                      contactNumber: formatted,
+                    }));
+                  },
                 }}
                 onlyCountries={["ph"]}
                 countryCodeEditable={false}
                 disableDropdown
-                inputProps={{ maxLength: 15 }}
                 inputClass="!w-full !py-2.5 !px-12 !rounded-lg !text-sm !h-auto !border-gray-300"
                 buttonClass="!border !border-gray-300 !rounded-l-lg !bg-white"
               />

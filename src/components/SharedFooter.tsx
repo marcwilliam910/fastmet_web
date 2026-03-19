@@ -1,4 +1,4 @@
-import { useRegistrationCounts } from "@/hooks/usePreRegQueries";
+import { useRegistrationCounts } from "@/hooks/useRegistrationQueries";
 import { Truck, User } from "lucide-react";
 import { SocialIcon } from "react-social-icons";
 
