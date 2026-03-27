@@ -1,43 +1,36 @@
 import { phone, phoneBG } from "@/constants/images";
-import {
-  BadgeCheck,
-  Banknote,
-  Clock3,
-  MapPin,
-  ShieldCheck,
-  Zap,
-} from "lucide-react";
+import { Clock, Star, Gift, Award, ShieldCheck, Banknote } from "lucide-react";
 
 const BENEFITS = [
   {
     icon: Banknote,
-    title: "Earn on Every Delivery",
-    desc: "Competitive rates with transparent pay — know exactly what you earn.",
+    title: "Zero Commission Program",
+    desc: "Iuwi mo ang buo mong kita—until the program last!",
   },
   {
-    icon: Clock3,
+    icon: Clock,
     title: "Flexible Schedule",
-    desc: "Drive when you want. No fixed hours, no quotas.",
+    desc: "Hawak mo ang oras mo — walang fixed hours, walang quotas!",
   },
   {
-    icon: Zap,
-    title: "First to Go Live",
-    desc: "Pre-registered drivers get priority approval when we launch.",
+    icon: Star,
+    title: "Early Bird Access",
+    desc: "Ang mga pre-registered drivers ay priority pag-launch ng FastMet.",
   },
   {
-    icon: MapPin,
-    title: "Metro Manila Coverage",
-    desc: "Start earning across all major cities from day one.",
+    icon: Gift,
+    title: "Win Exciting Rewards",
+    desc: "Manalo ng cash prizes at FastMet exclusive merchandise!",
   },
   {
-    icon: BadgeCheck,
+    icon: Award,
     title: "Founding Driver Badge",
-    desc: "Exclusive badge for early drivers — a mark of your commitment.",
+    desc: "Get an exclusive badge at maging parte ng FastMet history.",
   },
   {
     icon: ShieldCheck,
-    title: "Backed & Protected",
-    desc: "Ride with confidence. FastMet supports every driver on the road.",
+    title: "You are Protected",
+    desc: "Suportado ka namin sa bawat biyahe mo — laging safe.",
   },
 ];
 

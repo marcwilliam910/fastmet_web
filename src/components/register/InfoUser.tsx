@@ -1,42 +1,42 @@
 import {
-  BadgeCheck,
-  Clock3,
-  MapPin,
-  PackageCheck,
-  Percent,
-  ShieldCheck,
+  Truck, // wide range of vehicles
+  MapPin, // real-time tracking / location
+  Clock, // secured & fast / timely delivery
+  Calendar, // flexible hours / scheduling
+  Award, // early user badge / achievement
+  Gift, // rewards / prizes
 } from "lucide-react";
 
 const BENEFITS = [
   {
-    icon: PackageCheck,
-    title: "Send Anything, Anywhere",
-    desc: "From parcels to cargo — book a delivery in seconds.",
-  },
-  {
-    icon: Clock3,
-    title: "Real-Time Tracking",
-    desc: "Know exactly where your delivery is at every step.",
-  },
-  {
-    icon: Percent,
-    title: "Exclusive Launch Discounts",
-    desc: "Pre-registered users get credits and discounts on their first orders.",
+    icon: Truck,
+    title: "Wide Range of Vehicles",
+    desc: "Maliit man o malaki ang delivery, kayang-kaya ng FastMet!",
   },
   {
     icon: MapPin,
-    title: "Metro Manila Coverage",
-    desc: "Reliable delivery across all major cities from day one.",
+    title: "Real-Time Tracking",
+    desc: "Makikita mo ang exact location ng delivery mo — peace of mind, 24/7!",
   },
   {
-    icon: BadgeCheck,
+    icon: Clock,
+    title: "Secured and Fast Deliveries Always",
+    desc: "Laging safe at on-time—together, we keep your deliveries running smoothly.",
+  },
+  {
+    icon: Calendar,
+    title: "Flexible Hours",
+    desc: "Available ang deliveries depende sa oras at availability ng aming drivers. Layunin naming maghatid ng mabilis at maaasahang serbisyo kapag kailangan mo.",
+  },
+  {
+    icon: Award,
     title: "Early User Badge",
-    desc: "A permanent badge that marks you as a FastMet founding user.",
+    desc: "Kumuha ng exclusive badge at maging bahagi ng FastMet history!",
   },
   {
-    icon: ShieldCheck,
-    title: "Safe & Insured Deliveries",
-    desc: "Every booking is tracked and handled with care.",
+    icon: Gift,
+    title: "Win Exciting Rewards",
+    desc: "Manalo ng mobile load at FastMet exclusive delivery vouchers!",
   },
 ];
 

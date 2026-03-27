@@ -8,12 +8,15 @@ export default function Info() {
         <img src={megaphone} alt="Megaphone" className="size-7" />
         <p className="font-semibold text-white">Now in Metro Manila</p>
       </div>
-      <p className="text-primary font-bold text-2xl xl:text-4xl uppercase tracking-wide">
-        Heads Up Drivers!
+      <p className="text-xl sm:text-2xl xl:text-4xl font-extrabold tracking-tight leading-tight text-center text-gray-900">
+        Need it <span className="text-primary">Fast?</span>{" "}
+        <span className="text-gray-900">Consider it</span>{" "}
+        <span className="text-primary">Met.</span>
       </p>
-      <p className="font-semibold lg:text-xl xl:text-3xl text-sm hidden md:block">
-        We're launching Metro Manila's newest delivery platform — and we want
-        you on our team. Pre-register today and be first in line.
+      <p className="font-semibold lg:text-lg xl:text-2xl text-sm hidden md:block">
+        Welcome to FastMet! Got a vehicle and looking to earn more? Pre-register
+        now and be part of the delivery service that’s built for drivers like
+        you—fast, reliable, and rewarding!
       </p>
       <div className="space-y-2 hidden md:block">
         <p className="font-medium text-xs xl:text-base">

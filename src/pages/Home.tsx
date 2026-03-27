@@ -1,6 +1,8 @@
 import Info from "@/components/home/Info";
 import Phone from "@/components/home/Phone";
-import InfoModal from "@/components/modals/InfoModal";
+import QuestionForm from "@/components/home/QuestionForm";
+import { ClientFAQModal } from "@/components/modals/ClientFAQModal";
+import { DriverFAQModal } from "@/components/modals/DriverFAQModal";
 import LoaderModal from "@/components/modals/Loader";
 import {
   bg_map,
@@ -26,7 +28,7 @@ export default function Home() {
 
   const scrollToDriver = () => {
     if (driverRef.current) {
-      const offset = 60; // space from top in px
+      const offset = 300; // space from top in px
       const top =
         driverRef.current.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: "smooth" });
@@ -35,7 +37,7 @@ export default function Home() {
 
   const scrollToUser = () => {
     if (userRef.current) {
-      const offset = 100; // space from top in px
+      const offset = 300; // space from top in px
       const top =
         userRef.current.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: "smooth" });
@@ -85,16 +87,48 @@ export default function Home() {
               />
               <p className="font-semibold md:text-lg xl:text-2xl">FastMet</p>
             </div>
-            <p className="text-justify indent-5 md:text-lg lg:px-10 xl:px-20">
-              Welcome to FastMet — the last-mile logistics application built for
-              life in motion. In the dynamic, fast-paced environment of the
-              modern city, time is your most valuable asset. We will launch{" "}
-              <span className="font-semibold">FastMet</span> in{" "}
-              <span className="font-semibold">Metro Manila</span> with a single,
-              driving goal: to deliver the quickest, most reliable, and
-              technologically advanced delivery solution for both senders and
-              couriers.
-            </p>
+            <div className="lg:px-10 xl:px-20">
+              <p className="text-sm md:text-base font-bold tracking-wide text-gray-500 mb-2">
+                WHO WE ARE
+              </p>
+
+              <p className="text-justify md:text-base text-xs leading-relaxed text-gray-800">
+                <span className="font-semibold">
+                  FastMet is a proudly Pinoy-made delivery platform
+                </span>{" "}
+                built for the everyday needs of Filipinos. As we launch in{" "}
+                <span className="font-semibold">Metro Manila</span>, we are
+                bringing a smarter, faster, and more dependable way to handle
+                deliveries and errands.
+                <br />
+                <br />
+                FastMet is{" "}
+                <span className="font-semibold">
+                  built for employees, students, professionals, and businesses
+                </span>{" "}
+                — and for every Filipino who needs a reliable partner for daily
+                deliveries. Beyond serving customers, we are equally committed
+                to{" "}
+                <span className="font-semibold">
+                  empowering drivers through better opportunities
+                </span>
+                , support, and flexibility.
+                <br />
+                <br />
+                We understand that{" "}
+                <span className="font-semibold">every delivery matters</span>.
+                That is why our goal is simple:{" "}
+                <span className="font-semibold">on-time delivery</span> you can
+                depend on—bringing speed, reliability, and convenience to
+                everyday life.
+                <br />
+                <br />
+                <span className="font-semibold">
+                  Made by Filipinos, for Filipinos, FastMet is here to deliver
+                  the service you can count on.
+                </span>
+              </p>
+            </div>
           </div>
         </section>
 
@@ -126,14 +160,14 @@ export default function Home() {
           {/* Right Side - Text Content */}
           <div className="flex-1 flex flex-col gap-5 text-center md:text-left md:px-4 xl:gap-8">
             <h2 className="text-primary font-bold text-2xl md:text-3xl uppercase">
-              Heads Up Drivers!
+              Be a FastMet Driver
             </h2>
 
             <p className="text-gray-700 text-justify indent-5 md:text-lg leading-relaxed">
-              We&apos;re gearing up to launch a brand-new delivery platform in
-              Metro Manila and are actively seeking qualified drivers for our
-              pre-registration phase. By signing up now, you&apos;ll be one of
-              the first to be onboarded and ready to earn once we go live.
+              Sign up today and get ready to be among the first to earn when
+              FastMet goes live. Enjoy fast payments, flexible hours, and
+              exclusive early rewards. Join the fastest-growing delivery service
+              in the Philippines!
             </p>
 
             <div className="flex justify-center lg:justify-start items-center gap-3 md:gap-2">
@@ -153,7 +187,7 @@ export default function Home() {
                 Driver's Pre-Registration
               </Link>
 
-              <InfoModal />
+              <DriverFAQModal />
             </div>
           </div>
         </section>
@@ -186,12 +220,14 @@ export default function Home() {
           {/* Right Side - Text Content */}
           <div className="flex-1 flex flex-col gap-5 text-center md:text-left md:px-4 xl:gap-8">
             <h2 className="text-primary font-bold text-2xl md:text-3xl uppercase">
-              Get Ready!
+              Be a FastMet User
             </h2>
 
             <p className="text-gray-700 text-justify indent-5 md:text-lg leading-relaxed">
-              Instant Reward: Every user who pre-registers before our launch
-              date will automatically receive a reward.
+              Be the first to book deliveries with FastMet once we go live, and
+              unlock exclusive early rewards. Get the convenience of fast,
+              reliable deliveries right at your fingertips. Pre-register now to
+              get in on the action!
             </p>
 
             <div className="flex justify-center lg:justify-start items-center gap-3 md:gap-2">
@@ -210,10 +246,14 @@ export default function Home() {
               >
                 User's Pre-Registration
               </Link>
-              <InfoModal />
+              <ClientFAQModal />
             </div>
           </div>
         </section>
+
+        {/* <JoinSection /> */}
+
+        <QuestionForm />
       </div>
       <LoaderModal open={countsLoading || vehiclesLoading} />
     </div>

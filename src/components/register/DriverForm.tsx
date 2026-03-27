@@ -195,7 +195,7 @@ export default function DriverForm() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-User-Type": "driver", // or "client"
+        "X-User-Type": "driver",
       },
       body: JSON.stringify({
         phoneNumber: formData.contactNumber,

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { logo } from "@/constants/images";
-import InfoModal from "./modals/InfoModal";
+import GeneralFAQModal from "./modals/GeneralFAQModal";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
@@ -55,13 +55,13 @@ export default function Header() {
               <p className="text-sm font-semibold text-white/80 hover:text-white cursor-pointer">
                 FAQs
               </p>
-              <InfoModal />
+              <GeneralFAQModal />
             </div>
           </div>
 
           {/* ── Mobile right: FAQs + hamburger ────────────────────────────── */}
           <div className="flex md:hidden items-center gap-3">
-            <InfoModal />
+            <GeneralFAQModal />
             <button
               type="button"
               onClick={() => setMenuOpen((v) => !v)}
