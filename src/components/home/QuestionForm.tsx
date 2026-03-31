@@ -111,7 +111,7 @@ export default function QuestionForm() {
   return (
     <section className="flex flex-col md:flex-row items-center gap-10 py-10 md:mx-4 xl:mx-40 lg:mx-20 px-6 bg-gradient-to-br from-white to-[#FFF6ED]">
       {/* Left Side */}
-      <div className="flex-1 flex flex-col gap-4 text-center md:text-left">
+      <div className="flex-1 flex flex-col gap-4 text-center md:text-left md:pl-10">
         <div className="flex justify-center md:justify-start">
           <div className="bg-primary/10 p-3 rounded-full w-fit">
             <MessageCircleQuestion className="text-primary size-8 md:size-12" />
@@ -120,14 +120,14 @@ export default function QuestionForm() {
         <h2 className="text-primary font-bold text-2xl lg:text-5xl md:text-4xl uppercase">
           Got Questions?
         </h2>
-        <p className="text-gray-700 text-justify indent-5 md:text-lg leading-relaxed">
+        <p className="text-gray-700 text-justify  md:text-lg leading-relaxed">
           We&apos;d love to hear from you! Send us a message and we&apos;ll get
           back to you shortly.
         </p>
       </div>
 
       {/* Right Side — Form */}
-      <div className="flex-1 w-full">
+      <div className="flex-1 w-full grid place-items-center">
         {submitted ? (
           <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
             <div className="bg-primary/10 p-4 rounded-full">
@@ -147,7 +147,7 @@ export default function QuestionForm() {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="bg-white rounded-2xl shadow-md border border-orange-100 p-6 flex flex-col gap-4"
+            className="bg-white rounded-2xl py-10 2xl:w-2/3 shadow-md border border-orange-100 p-6 flex flex-col gap-4"
           >
             {errors.form && (
               <p className="text-red-500 text-sm text-center">{errors.form}</p>
@@ -197,7 +197,7 @@ export default function QuestionForm() {
                 onChange={handleChange}
                 rows={4}
                 placeholder="Type your question or concern here..."
-                className={`border  ${errors.message ? "border-red-500" : "border-gray-200"} rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition`}
+                className={`border  ${errors.message ? "border-red-500" : "border-gray-200"} rounded-xl max-h-52 min-h-24 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition`}
               />
               {errors.message && (
                 <p className="text-red-500 text-xs ml-2">{errors.message}</p>
