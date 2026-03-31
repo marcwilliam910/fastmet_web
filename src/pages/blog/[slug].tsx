@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { CalendarDays, Clock, ArrowLeft, ArrowRight, Tag } from "lucide-react";
-import type { IBlogPost } from "@/types/blog";
-import { useBlog } from "@/hooks/useBlogQueries";
+import type { IBlogPost, IBlogPostDetail } from "@/types/blog";
+import { queryClient } from "@/lib/queryClient";
 
 const formatDate = (d: string) =>
   new Date(d).toLocaleDateString("en-PH", {
@@ -17,38 +17,6 @@ const tagColors: Record<string, string> = {
   Guide: "bg-green-100 text-green-700",
   Updates: "bg-amber-100 text-amber-700",
 };
-
-// ── Skeleton ──────────────────────────────────────────────────────────────
-
-function BlogPostSkeleton() {
-  return (
-    <div className="animate-pulse">
-      {/* Banner skeleton */}
-      <div className="w-full h-64 md:h-[480px] bg-gray-200 mb-10" />
-      <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12">
-        <div className="flex gap-12">
-          <div className="flex-1 space-y-4">
-            <div className="h-4 w-24 bg-gray-200 rounded-full" />
-            <div className="h-8 w-full bg-gray-200 rounded" />
-            <div className="h-8 w-3/4 bg-gray-200 rounded" />
-            <div className="space-y-2 pt-6">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`h-3 bg-gray-100 rounded ${i % 4 === 3 ? "w-2/3" : "w-full"}`}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="hidden lg:block w-72 shrink-0 space-y-3">
-            <div className="h-32 bg-gray-100 rounded-2xl" />
-            <div className="h-48 bg-gray-100 rounded-2xl" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ── Related post card ─────────────────────────────────────────────────────
 
@@ -88,29 +56,11 @@ function RelatedCard({ post }: { post: IBlogPost }) {
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { data: post, isLoading, isError } = useBlog(slug!);
 
-  if (isLoading)
-    return (
-      <section className="min-h-screen bg-gray-50 pt-16">
-        <BlogPostSkeleton />
-      </section>
-    );
+  const posts = queryClient.getQueryData<IBlogPostDetail[]>(["blogs"]) ?? [];
+  const post = posts.find((p) => p.slug === slug);
 
-  if (isError || !post)
-    return (
-      <section className="min-h-screen bg-gray-50 pt-20 flex flex-col items-center justify-center gap-4">
-        <p className="text-gray-400 text-sm">
-          Post not found or failed to load.
-        </p>
-        <Link
-          to="/blog"
-          className="text-xs font-semibold text-primary hover:underline"
-        >
-          Back to all posts
-        </Link>
-      </section>
-    );
+  if (!post) return null;
 
   return (
     <section className="min-h-screen bg-gray-50">

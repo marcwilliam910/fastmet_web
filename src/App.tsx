@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import DriverRegister from "./pages/DriverRegister";
@@ -7,15 +7,7 @@ import ErrorBoundary from "./pages/Error";
 import UserRegister from "./pages/UserRegister";
 import BlogPost from "./pages/blog/[slug]";
 import BlogList from "./pages/blog/index";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: Infinity,
-      retry: 1,
-    },
-  },
-});
+import { queryClient } from "./lib/queryClient";
 
 const router = createBrowserRouter([
   {
