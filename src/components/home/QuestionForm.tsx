@@ -109,15 +109,15 @@ export default function QuestionForm() {
   };
 
   return (
-    <section className="flex flex-col md:flex-row items-center gap-10 py-10 px-6 bg-gradient-to-br from-white to-[#FFF6ED]">
+    <section className="flex flex-col md:flex-row items-center gap-10 py-10 md:mx-4 xl:mx-40 lg:mx-20 px-6 bg-gradient-to-br from-white to-[#FFF6ED]">
       {/* Left Side */}
       <div className="flex-1 flex flex-col gap-4 text-center md:text-left">
         <div className="flex justify-center md:justify-start">
           <div className="bg-primary/10 p-3 rounded-full w-fit">
-            <MessageCircleQuestion className="text-primary size-8" />
+            <MessageCircleQuestion className="text-primary size-8 md:size-12" />
           </div>
         </div>
-        <h2 className="text-primary font-bold text-2xl md:text-4xl uppercase">
+        <h2 className="text-primary font-bold text-2xl lg:text-5xl md:text-4xl uppercase">
           Got Questions?
         </h2>
         <p className="text-gray-700 text-justify indent-5 md:text-lg leading-relaxed">
