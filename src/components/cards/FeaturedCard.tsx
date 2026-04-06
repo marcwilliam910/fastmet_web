@@ -11,11 +11,7 @@ export default function FeaturedCard({ post }: { post: IBlogPost }) {
       className="group col-span-full flex flex-col md:flex-row bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-primary/20 hover:shadow-md transition-all duration-200"
     >
       <div className="md:w-56 lg:w-72 h-36 md:h-auto shrink-0 overflow-hidden">
-        <img
-          src={post.heroImage}
-          alt={post.title}
-          className="w-full h-full object-cover"
-        />
+        <img src={post.heroImage} alt={post.title} className="w-full h-full" />
       </div>
       <div className="flex flex-col justify-between p-6 flex-1">
         <div>

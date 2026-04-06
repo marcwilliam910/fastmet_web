@@ -113,14 +113,10 @@ export default function BlogPost() {
     );
 
   return (
-    <section className="min-h-screen bg-gray-50">
+    <section className="min-h-screen bg-gray-50 ">
       {/* ── Full-bleed hero banner ───────────────────────────────────────── */}
-      <div className="relative w-full h-64 md:h-[480px] overflow-hidden">
-        <img
-          src={post.heroImage}
-          alt={post.title}
-          className="w-full h-full object-cover"
-        />
+      <div className="relative w-full h-64 md:h-[520px] overflow-hidden">
+        <img src={post.heroImage} alt={post.title} className="w-full h-full" />
         {/* Gradient overlay — darker at bottom so text is readable */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
